@@ -1,0 +1,120 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ isEditMode ? 'Edit Club Table' : 'New Club Table' }}</h1>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form && (!isLoading || isEditMode)">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          placeholder="e.g. Table VIP-1"
+        />
+        <mat-icon matSuffix>table_restaurant</mat-icon>
+        <mat-error *ngIf="hasError('name')">Name is required</mat-error>
+      </mat-form-field>
+
+      <!-- Section -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Section (optional)</mat-label>
+        <input
+          matInput
+          formControlName="section"
+          placeholder="e.g. VIP Lounge, Main Floor"
+        />
+        <mat-icon matSuffix>location_on</mat-icon>
+      </mat-form-field>
+
+      <!-- Capacity + Min Spend row -->
+      <div class="form-row">
+        <!-- Capacity -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Capacity</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="capacity"
+            placeholder="e.g. 6"
+          />
+          <mat-icon matSuffix>people</mat-icon>
+          <mat-error *ngIf="hasError('capacity')">Capacity must be at least 1</mat-error>
+        </mat-form-field>
+
+        <!-- Min Spend -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Min Spend</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="minSpend"
+            step="0.01"
+            placeholder="0.00"
+          />
+          <span matTextSuffix>&nbsp;KM</span>
+          <mat-icon matSuffix>toll</mat-icon>
+          <mat-error *ngIf="hasError('minSpend')">Min spend must be 0 or more</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Description -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description (optional)</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="Additional details about this table..."
+          rows="3"
+        ></textarea>
+        <mat-icon matSuffix>notes</mat-icon>
+      </mat-form-field>
+
+      <!-- Checkboxes row -->
+      <div class="checkboxes-row">
+        <mat-checkbox formControlName="isVip" class="checkbox-vip">
+          <mat-icon class="checkbox-icon">star</mat-icon>
+          VIP Table
+        </mat-checkbox>
+
+        <mat-checkbox *ngIf="isEditMode" formControlName="isEnabled" class="checkbox-enabled">
+          <mat-icon class="checkbox-icon">check_circle</mat-icon>
+          Active
+        </mat-checkbox>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="form.invalid || isLoading"
+        >
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading && !form" class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading...</p>
+    </div>
+  </div>
+</div>

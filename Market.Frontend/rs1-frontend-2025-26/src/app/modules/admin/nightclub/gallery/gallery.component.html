@@ -1,0 +1,93 @@
+<div class="container">
+
+  <!-- Shader bg -->
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header-card">
+    <div class="header-card-content">
+      <h1>Galerija</h1>
+      <div class="actions-container">
+        <div class="search-wrap">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            class="search-input"
+            placeholder="Pretraži evente..."
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Učitavanje evenata...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && !errorMessage && filteredEvents.length === 0" class="empty-state">
+    <mat-icon>photo_library</mat-icon>
+    <p>Nema pronađenih evenata.</p>
+  </div>
+
+  <!-- Event cards grid -->
+  <div *ngIf="!isLoading && !errorMessage && filteredEvents.length > 0" class="events-grid">
+    <div
+      class="event-card"
+      *ngFor="let event of filteredEvents"
+      (click)="openEventGallery(event)"
+    >
+      <!-- Cover image -->
+      <div class="card-cover">
+        <img
+          *ngIf="event.imageUrl"
+          [src]="event.imageUrl"
+          [alt]="event.title"
+          class="cover-img"
+        />
+        <div *ngIf="!event.imageUrl" class="cover-placeholder">
+          <mat-icon>image_not_supported</mat-icon>
+        </div>
+
+        <!-- Status badges -->
+        <div class="card-badges">
+          <span class="badge badge-published" *ngIf="event.isPublished">Objavljeno</span>
+          <span class="badge badge-draft" *ngIf="!event.isPublished">Draft</span>
+          <span class="badge badge-disabled" *ngIf="!event.isEnabled">Neaktivno</span>
+        </div>
+      </div>
+
+      <!-- Card body -->
+      <div class="card-body">
+        <div class="card-title">{{ event.title }}</div>
+        <div class="card-meta">
+          <span class="meta-item">
+            <mat-icon class="meta-icon">calendar_today</mat-icon>
+            {{ formatDate(event.date) }}
+          </span>
+          <span class="meta-item" *ngIf="event.mainArtist">
+            <mat-icon class="meta-icon">mic</mat-icon>
+            {{ event.mainArtist }}
+          </span>
+        </div>
+        <div class="card-action">
+          <mat-icon>photo_library</mat-icon>
+          Upravljaj galerijom
+          <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

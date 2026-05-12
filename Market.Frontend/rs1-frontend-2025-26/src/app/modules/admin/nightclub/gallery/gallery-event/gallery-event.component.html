@@ -1,0 +1,96 @@
+<div class="container">
+
+  <!-- Shader bg -->
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header-card">
+    <div class="header-left">
+      <button mat-icon-button class="back-btn" (click)="goBack()" matTooltip="Nazad na galeriju">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-titles">
+        <div class="header-breadcrumb">
+          <span class="breadcrumb-link" (click)="goBack()">Galerija</span>
+          <mat-icon class="breadcrumb-sep">chevron_right</mat-icon>
+          <span class="breadcrumb-current">{{ event?.title || 'Event' }}</span>
+        </div>
+        <h1>
+          <span *ngIf="event">{{ event.title }}</span>
+          <span *ngIf="!event">Galerija eventa</span>
+          <span class="event-date" *ngIf="event">{{ formatDate(event.date) }}</span>
+        </h1>
+      </div>
+    </div>
+
+    <button mat-raised-button class="add-btn" (click)="openAddDialog()" [disabled]="isLoading">
+      <mat-icon>add_photo_alternate</mat-icon>
+      Dodaj sliku
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Učitavanje galerije...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && !errorMessage && images.length === 0" class="empty-state">
+    <mat-icon>photo_camera</mat-icon>
+    <p>Nema slika u galeriji ovog eventa.</p>
+    <button mat-stroked-button class="empty-add-btn" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Dodaj prvu sliku
+    </button>
+  </div>
+
+  <!-- Image grid -->
+  <div *ngIf="!isLoading && !errorMessage && images.length > 0" class="image-grid">
+    <div
+      class="image-card"
+      *ngFor="let img of images"
+      [class.disabled]="!img.isEnabled"
+    >
+      <!-- Thumbnail -->
+      <div class="img-wrap">
+        <img [src]="img.imageUrl" [alt]="img.caption || 'Gallery image'" class="thumb" />
+        <div class="img-overlay">
+          <button
+            mat-icon-button
+            class="overlay-btn edit-btn"
+            (click)="openEditDialog(img)"
+            matTooltip="Uredi"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="overlay-btn delete-btn"
+            (click)="onDelete(img)"
+            matTooltip="Obriši"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="disabled-badge" *ngIf="!img.isEnabled">Neaktivno</div>
+      </div>
+
+      <!-- Caption + order -->
+      <div class="img-info">
+        <span class="img-caption">{{ img.caption || '—' }}</span>
+        <span class="img-order">#{{ img.displayOrder }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

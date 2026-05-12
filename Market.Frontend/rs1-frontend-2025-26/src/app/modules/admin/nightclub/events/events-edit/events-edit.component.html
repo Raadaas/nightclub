@@ -1,0 +1,122 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ isEditMode ? 'Edit Event' : 'New Event' }}</h1>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form && (!isLoading || isEditMode)">
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Title -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          placeholder="e.g. Saturday Night Live"
+        />
+        <mat-icon matSuffix>celebration</mat-icon>
+        <mat-error *ngIf="hasError('title')">Title is required</mat-error>
+      </mat-form-field>
+
+      <!-- Date + Doors Open row -->
+      <div class="form-row">
+        <!-- Date -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="datePicker"
+            formControlName="date"
+            placeholder="DD.MM.YYYY"
+            readonly
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+          <mat-error *ngIf="hasError('date')">Date is required</mat-error>
+        </mat-form-field>
+
+        <!-- Doors Open At -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Doors Open At</mat-label>
+          <input
+            matInput
+            type="time"
+            formControlName="doorsOpenAt"
+          />
+          <mat-icon matSuffix>schedule</mat-icon>
+          <mat-error *ngIf="hasError('doorsOpenAt')">Doors open time is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Main Artist -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Main Artist (optional)</mat-label>
+        <input
+          matInput
+          formControlName="mainArtist"
+          placeholder="e.g. DJ Shadow"
+        />
+        <mat-icon matSuffix>music_note</mat-icon>
+      </mat-form-field>
+
+      <!-- Image -->
+      <app-image-picker formControlName="imageUrl" label="Slika eventa (opcionalno)" />
+
+      <!-- Description -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description (optional)</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="Event details, dress code, special notes..."
+          rows="3"
+        ></textarea>
+        <mat-icon matSuffix>notes</mat-icon>
+      </mat-form-field>
+
+      <!-- Checkboxes row -->
+      <div class="checkboxes-row">
+        <mat-checkbox formControlName="isPublished" class="checkbox-published">
+          <mat-icon class="checkbox-icon">public</mat-icon>
+          Published
+        </mat-checkbox>
+
+        <mat-checkbox *ngIf="isEditMode" formControlName="isEnabled" class="checkbox-enabled">
+          <mat-icon class="checkbox-icon">check_circle</mat-icon>
+          Active
+        </mat-checkbox>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="form.invalid || isLoading"
+        >
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading && !form" class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading...</p>
+    </div>
+  </div>
+</div>

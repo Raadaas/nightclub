@@ -2,41 +2,51 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
-import { ProductsComponent } from './catalogs/products/products.component';
-import { ProductsAddComponent } from './catalogs/products/products-add/products-add.component';
-import { ProductsEditComponent } from './catalogs/products/products-edit/products-edit.component';
-import { ProductCategoriesComponent } from './catalogs/product-categories/product-categories.component';
-import {AdminOrdersComponent} from './orders/admin-orders.component';
-import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
+import { AdminSettingsComponent } from './admin-settings/admin-settings.component';
+import { ClubTablesComponent } from './nightclub/club-tables/club-tables.component';
+import { ClubTablesEditComponent } from './nightclub/club-tables/club-tables-edit/club-tables-edit.component';
+import { EventsComponent } from './nightclub/events/events.component';
+import { EventsEditComponent } from './nightclub/events/events-edit/events-edit.component';
+import { ReservationsComponent } from './nightclub/reservations/reservations.component';
+import { GalleryComponent } from './nightclub/gallery/gallery.component';
+import { GalleryEventComponent } from './nightclub/gallery/gallery-event/gallery-event.component';
+import { MenuCategoriesComponent } from './catalog/menu-categories/menu-categories.component';
+import { MenuCategoryEditComponent } from './catalog/menu-categories/menu-category-edit/menu-category-edit.component';
+import { MenuItemsComponent } from './catalog/menu-items/menu-items.component';
+import { MenuItemsAddComponent } from './catalog/menu-items/menu-items-add/menu-items-add.component';
+import { MenuItemsEditComponent } from './catalog/menu-items/menu-items-edit/menu-items-edit.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
-      // PRODUCTS
+      // MENU CATEGORIES
       {
-        path: 'products',
-        component: ProductsComponent,
+        path: 'menu-categories',
+        component: MenuCategoriesComponent,
       },
       {
-        path: 'products/add',
-        component: ProductsAddComponent,
+        path: 'menu-categories/add',
+        component: MenuCategoryEditComponent,
       },
       {
-        path: 'products/:id/edit',
-        component: ProductsEditComponent,
-      },
-
-      // PRODUCT CATEGORIES
-      {
-        path: 'product-categories',
-        component: ProductCategoriesComponent,
+        path: 'menu-categories/:id/edit',
+        component: MenuCategoryEditComponent,
       },
 
+      // MENU ITEMS
       {
-        path: 'orders',
-        component: AdminOrdersComponent,
+        path: 'menu-items',
+        component: MenuItemsComponent,
+      },
+      {
+        path: 'menu-items/add',
+        component: MenuItemsAddComponent,
+      },
+      {
+        path: 'menu-items/:id/edit',
+        component: MenuItemsEditComponent,
       },
 
       {
@@ -44,11 +54,54 @@ const routes: Routes = [
         component: AdminSettingsComponent,
       },
 
+      // CLUB TABLES
+      {
+        path: 'club-tables',
+        component: ClubTablesComponent,
+      },
+      {
+        path: 'club-tables/add',
+        component: ClubTablesEditComponent,
+      },
+      {
+        path: 'club-tables/:id/edit',
+        component: ClubTablesEditComponent,
+      },
 
-      // default admin route → /admin/products
+      // EVENTS
+      {
+        path: 'events',
+        component: EventsComponent,
+      },
+      {
+        path: 'events/add',
+        component: EventsEditComponent,
+      },
+      {
+        path: 'events/:id/edit',
+        component: EventsEditComponent,
+      },
+
+      // RESERVATIONS
+      {
+        path: 'reservations',
+        component: ReservationsComponent,
+      },
+
+      // GALLERY
+      {
+        path: 'gallery',
+        component: GalleryComponent,
+      },
+      {
+        path: 'gallery/event/:id',
+        component: GalleryEventComponent,
+      },
+
+      // default admin route → /admin/menu-items
       {
         path: '',
-        redirectTo: 'products',
+        redirectTo: 'menu-items',
         pathMatch: 'full',
       },
     ],

@@ -61,26 +61,41 @@
         {{ 'ADMIN_PANEL.MENU.CATALOG' | translate }}
       </div>
 
-      <a mat-list-item routerLink="/admin/product-categories" routerLinkActive="active">
-        <mat-icon matListItemIcon>style</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.CATEGORIES' | translate }}</span>
+      <a mat-list-item routerLink="/admin/menu-categories" routerLinkActive="active">
+        <mat-icon matListItemIcon>restaurant_menu</mat-icon>
+        <span matListItemTitle>Kategorije menija</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/products" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/menu-items" routerLinkActive="active">
         <mat-icon matListItemIcon>local_bar</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.PRODUCTS' | translate }}</span>
+        <span matListItemTitle>Stavke menija</span>
       </a>
 
       <mat-divider></mat-divider>
 
-      <!-- ORDERS SECTION -->
+      <!-- NIGHTCLUB SECTION -->
       <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.ORDERS_SECTION' | translate }}
+        Nightclub
       </div>
 
-      <a mat-list-item routerLink="/admin/orders" routerLinkActive="active">
-        <mat-icon matListItemIcon>receipt_long</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.ORDERS' | translate }}</span>
+      <a mat-list-item routerLink="/admin/club-tables" routerLinkActive="active">
+        <mat-icon matListItemIcon>table_restaurant</mat-icon>
+        <span matListItemTitle>Club Tables</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/events" routerLinkActive="active">
+        <mat-icon matListItemIcon>celebration</mat-icon>
+        <span matListItemTitle>Events</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/reservations" routerLinkActive="active">
+        <mat-icon matListItemIcon>event_seat</mat-icon>
+        <span matListItemTitle>Reservations</span>
+      </a>
+
+      <a mat-list-item routerLink="/admin/gallery" routerLinkActive="active">
+        <mat-icon matListItemIcon>photo_library</mat-icon>
+        <span matListItemTitle>Galerija</span>
       </a>
 
       <mat-divider></mat-divider>

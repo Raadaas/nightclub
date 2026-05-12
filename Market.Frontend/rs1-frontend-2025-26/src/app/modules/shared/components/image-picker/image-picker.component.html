@@ -1,0 +1,84 @@
+<div class="image-picker" [class.disabled]="isDisabled">
+
+  <!-- Preview + Drop zone -->
+  <div class="preview-zone" (click)="!isDisabled && openFilePicker()">
+
+    <!-- Uploading spinner -->
+    <div *ngIf="isUploading" class="upload-overlay">
+      <mat-spinner diameter="36"></mat-spinner>
+      <span>Učitavanje...</span>
+    </div>
+
+    <!-- Image preview -->
+    <img *ngIf="value && !isUploading" [src]="value" alt="Preview" class="preview-img" />
+
+    <!-- Placeholder -->
+    <div *ngIf="!value && !isUploading" class="placeholder">
+      <mat-icon class="placeholder-icon">add_photo_alternate</mat-icon>
+      <span class="placeholder-text">Klikni ili prevuci sliku ovdje</span>
+      <span class="placeholder-sub">JPG, PNG, WEBP · maks. 5 MB</span>
+    </div>
+
+    <!-- Change overlay on hover when image exists -->
+    <div *ngIf="value && !isUploading" class="change-overlay">
+      <mat-icon>photo_camera</mat-icon>
+      <span>Promijeni sliku</span>
+    </div>
+  </div>
+
+  <!-- Hidden file input -->
+  <input
+    #fileInput
+    type="file"
+    accept=".jpg,.jpeg,.png,.gif,.webp"
+    class="hidden-input"
+    (change)="onFileSelected($event)"
+    [disabled]="isDisabled"
+  />
+
+  <!-- Action row -->
+  <div class="picker-actions">
+    <button
+      type="button"
+      mat-stroked-button
+      class="upload-btn"
+      (click)="openFilePicker()"
+      [disabled]="isDisabled || isUploading"
+    >
+      <mat-icon>upload</mat-icon>
+      Odaberi sa PC-a
+    </button>
+
+    <span class="divider-text">ili URL:</span>
+
+    <!-- URL input -->
+    <input
+      class="url-input"
+      type="text"
+      placeholder="https://..."
+      [value]="value"
+      (input)="onUrlInput($event)"
+      [disabled]="isDisabled || isUploading"
+    />
+
+    <!-- Clear -->
+    <button
+      *ngIf="value"
+      type="button"
+      mat-icon-button
+      class="clear-btn"
+      (click)="clearImage()"
+      matTooltip="Ukloni sliku"
+      [disabled]="isDisabled"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Upload error -->
+  <div *ngIf="uploadError" class="upload-error">
+    <mat-icon>error_outline</mat-icon>
+    {{ uploadError }}
+  </div>
+
+</div>

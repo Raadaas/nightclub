@@ -81,6 +81,8 @@ public partial class Program
             app.UseHttpsRedirection();
             // UseCors ide prije UseAuthorization i UseAuthentification
             app.UseCors("AllowAngularDev");
+            // Static files after CORS so uploaded images have CORS headers
+            app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseAuthorization();

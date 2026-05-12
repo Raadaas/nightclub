@@ -1,0 +1,82 @@
+<div class="container">
+
+  <!-- Header -->
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ isEditMode ? 'Uredi kategoriju menija' : 'Nova kategorija menija' }}</h1>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
+
+      <!-- Error banner -->
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Loading overlay -->
+      <div *ngIf="isLoading" class="loading-overlay">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>{{ isEditMode ? 'Ažuriranje...' : 'Kreiranje...' }}</p>
+      </div>
+
+      <!-- Naziv -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Naziv kategorije</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          placeholder="npr. Koktelji, Pića, Hrana..."
+        />
+        <mat-icon matSuffix>restaurant_menu</mat-icon>
+        <mat-error *ngIf="hasError('name')">
+          <ng-container *ngIf="form.get('name')?.hasError('required')">Naziv je obavezan</ng-container>
+          <ng-container *ngIf="form.get('name')?.hasError('maxlength')">Naziv ne smije biti duži od 100 znakova</ng-container>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Redoslijed prikaza -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Redoslijed prikaza</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="displayOrder"
+          placeholder="0"
+          min="0"
+        />
+        <mat-icon matSuffix>format_list_numbered</mat-icon>
+        <mat-error *ngIf="hasError('displayOrder')">
+          <ng-container *ngIf="form.get('displayOrder')?.hasError('required')">Redoslijed je obavezan</ng-container>
+          <ng-container *ngIf="form.get('displayOrder')?.hasError('min')">Redoslijed mora biti 0 ili veći</ng-container>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Aktivna (samo u edit modu) -->
+      <div class="enabled-field" *ngIf="isEditMode">
+        <mat-checkbox formControlName="isEnabled">
+          Aktivna kategorija
+        </mat-checkbox>
+      </div>
+
+      <!-- Akcije -->
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
+          <mat-icon>close</mat-icon>
+          Otkaži
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          [disabled]="form.invalid || isLoading"
+        >
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Ažuriraj' : 'Kreiraj' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

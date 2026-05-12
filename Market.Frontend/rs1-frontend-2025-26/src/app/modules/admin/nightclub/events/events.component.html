@@ -1,0 +1,149 @@
+<div class="container">
+
+  <!-- Shader pozadina -->
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Header kartica -->
+  <div class="header-card mat-elevation-z2">
+    <div class="header-card-content">
+      <!-- Lijevo: naslov -->
+      <h1>Events</h1>
+
+      <!-- Desno: search + novi event -->
+      <div class="actions-container">
+        <div class="search-wrap">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            class="search-input"
+            placeholder="Search events..."
+            (keyup.enter)="request.paging.page = 1; loadPagedData()"
+            [(ngModel)]="request.search"
+          />
+        </div>
+
+        <button mat-raised-button color="primary" (click)="onCreate()">
+          <mat-icon>add</mat-icon>
+          New Event
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading / error -->
+  <div *ngIf="isLoading" class="loading">
+    Loading events...
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Tabela -->
+  <div class="mat-elevation-z8" *ngIf="!isLoading && !errorMessage">
+    <table mat-table [dataSource]="items">
+
+      <!-- Naziv -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let event">
+          <span style="font-weight: 500">{{ event.title }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Datum -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let event">
+          <span class="date-cell">{{ event.date | date: 'dd.MM.yyyy' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Otvaranje vrata -->
+      <ng-container matColumnDef="doorsOpenAt">
+        <th mat-header-cell *matHeaderCellDef>Doors Open</th>
+        <td mat-cell *matCellDef="let event">
+          <span class="time-cell">{{ formatDoorsOpenAt(event.doorsOpenAt) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Glavni umjetnik -->
+      <ng-container matColumnDef="mainArtist">
+        <th mat-header-cell *matHeaderCellDef>Artist</th>
+        <td mat-cell *matCellDef="let event">
+          <span [class]="event.mainArtist ? '' : 'text-muted'">{{ event.mainArtist || '—' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Objavljeno -->
+      <ng-container matColumnDef="isPublished">
+        <th mat-header-cell *matHeaderCellDef>Published</th>
+        <td mat-cell *matCellDef="let event">
+          <mat-icon [ngClass]="event.isPublished ? 'icon-published' : 'icon-disabled'">
+            {{ event.isPublished ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Aktivno -->
+      <ng-container matColumnDef="isEnabled">
+        <th mat-header-cell *matHeaderCellDef>Active</th>
+        <td mat-cell *matCellDef="let event">
+          <mat-icon [ngClass]="event.isEnabled ? 'icon-enabled' : 'icon-disabled'">
+            {{ event.isEnabled ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Akcije -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let event">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="onEdit(event)"
+            matTooltip="Edit event"
+          >
+            <mat-icon>edit_note</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(event)"
+            matTooltip="Delete event"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+      <!-- No data -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <ng-container *ngIf="request.search; else noDataDefault">
+            No events match your search.
+          </ng-container>
+          <ng-template #noDataDefault>
+            No events found.
+          </ng-template>
+        </td>
+      </tr>
+    </table>
+
+    <app-fit-paginator-bar [vm]="this" />
+  </div>
+</div>
