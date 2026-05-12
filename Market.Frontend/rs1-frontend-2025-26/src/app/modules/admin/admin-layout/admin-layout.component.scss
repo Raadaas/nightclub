@@ -1,91 +1,101 @@
-// Colors
-$primary-color: #4976b5;
-$primary-light: #6b92c9;
-$primary-dark: #365a8f;
-$accent-color: #5b9bd5;
-$success-color: #66bb6a;
-$error-color: #ef5350;
-$warning-color: #ffa726;
-$text-primary: #212121;
-$text-secondary: #757575;
-$text-light: #9e9e9e;
-$background-page: linear-gradient(135deg, #f0f5fb 0%, #e3ecf7 100%);
-$background-card: #ffffff;
-$border-color: #e3e8ef;
-$hover-color: #f5f8fc;
-$sidebar-bg: #ffffff;
-$sidebar-width: 280px;
+// ===== NIGHTCLUB ADMIN — Dark Minimalistic =====
+$neon-purple:   #a855f7;
+$neon-cyan:     #22d3ee;
+$neon-pink:     #ec4899;
+$sidebar-bg:    #07070f;
+$sidebar-width: 264px;
+$content-bg:    #0a0a16;
+$text:          #ffffff;
+$text-muted:    rgba(255, 255, 255, 0.65);
+$text-dim:      rgba(255, 255, 255, 0.38);
+$border:        rgba(168, 85, 247, 0.1);
+$hover-bg:      rgba(168, 85, 247, 0.06);
+$error-color:   #f87171;
 
-// Sidenav Container
+// ===== KEYFRAMES =====
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+// ===== SIDENAV CONTAINER =====
 .sidenav-container {
   height: 100vh;
   width: 100%;
-  background: $background-page;
+  background: $content-bg;
 
-  // Sidebar
+  // Material theme overrides for dark mode
+  --mat-sidenav-container-background-color: #{$sidebar-bg};
+  --mat-sidenav-container-divider-color: #{$border};
+  --mat-sidenav-content-background-color: #{$content-bg};
+  --mat-sidenav-scrim-color: rgba(0, 0, 0, 0.7);
+
+  // Override Material sidenav background
+  ::ng-deep .mat-drawer-backdrop {
+    background: rgba(0,0,0,0.7);
+  }
+
+  // ===== SIDEBAR =====
   .sidenav {
     width: $sidebar-width;
     background: $sidebar-bg;
-    border-right: 1px solid $border-color;
-    box-shadow: 4px 0 16px rgba(73, 118, 181, 0.08);
+    border-right: 1px solid $border;
+    box-shadow: 4px 0 40px rgba(0,0,0,0.5), 1px 0 0 rgba(168,85,247,0.08);
     display: flex;
     flex-direction: column;
+    animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
-    // Sidebar Header
+    // ===== SIDEBAR HEADER =====
     .sidebar-header {
-      background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
       padding: 24px 20px;
       position: relative;
       overflow: hidden;
+      border-bottom: 1px solid $border;
 
-      // Decorative elements
+      // ambient neon glow top-right
       &::before {
         content: '';
         position: absolute;
-        top: -30px;
-        right: -30px;
-        width: 120px;
-        height: 120px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        top: -60px; right: -60px;
+        width: 180px; height: 180px;
+        background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%);
         border-radius: 50%;
+        pointer-events: none;
       }
 
+      // ambient neon glow bottom-left
       &::after {
         content: '';
         position: absolute;
-        bottom: -20px;
-        left: -20px;
-        width: 80px;
-        height: 80px;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        bottom: -40px; left: -40px;
+        width: 120px; height: 120px;
+        background: radial-gradient(circle, rgba(34,211,238,0.08) 0%, transparent 70%);
         border-radius: 50%;
+        pointer-events: none;
       }
 
-      // User Info
+      // ===== USER INFO =====
       .user-info {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 14px;
         margin-bottom: 16px;
         position: relative;
         z-index: 1;
 
         .user-avatar {
-          width: 56px;
-          height: 56px;
-          background: rgba(255, 255, 255, 0.2);
+          width: 44px; height: 44px;
+          background: rgba(168,85,247,0.12);
+          border: 1px solid rgba(168,85,247,0.25);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          backdrop-filter: blur(10px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          flex-shrink: 0;
 
           mat-icon {
-            font-size: 36px;
-            width: 36px;
-            height: 36px;
-            color: $background-card;
+            font-size: 26px; width: 26px; height: 26px;
+            color: rgba(168,85,247,0.8);
           }
         }
 
@@ -94,431 +104,346 @@ $sidebar-width: 280px;
           min-width: 0;
 
           .user-email {
-            color: $background-card;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            color: $text;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
           }
 
           .user-role {
             .role-chip {
-              width: 80%;
-              height: 28px;
-              font-size: 11px;
+              height: 22px;
+              font-size: 10px;
               font-weight: 600;
-              padding: 0 12px;
-              border-radius: 14px;
+              padding: 0 10px;
+              border-radius: 11px;
               text-transform: uppercase;
-              letter-spacing: 0.5px;
+              letter-spacing: 0.8px;
               display: inline-flex;
               align-items: center;
-              gap: 6px;
+              gap: 5px;
 
-              mat-icon {
-                font-size: 16px;
-                width: 16px;
-                height: 16px;
-              }
+              mat-icon { font-size: 13px; width: 13px; height: 13px; }
 
               &.admin {
-                background: rgba(239, 83, 80, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                background: rgba(168,85,247,0.15);
+                color: $neon-purple;
+                border: 1px solid rgba(168,85,247,0.3);
               }
-
               &.manager {
-                background: rgba(255, 167, 38, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                background: rgba(34,211,238,0.12);
+                color: $neon-cyan;
+                border: 1px solid rgba(34,211,238,0.25);
               }
-
               &.employee {
-                background: rgba(102, 187, 106, 0.2);
-                color: #ffffff;
-                border: 1px solid rgba(255, 255, 255, 0.3);
+                background: rgba(236,72,153,0.12);
+                color: $neon-pink;
+                border: 1px solid rgba(236,72,153,0.25);
               }
             }
           }
         }
       }
 
-      // Language Selector
+      // ===== LANGUAGE SELECTOR =====
       .language-selector {
         position: relative;
         z-index: 1;
 
         .lang-button {
-          background: rgba(255, 255, 255, 0.15);
-          border-radius: 12px;
-          backdrop-filter: blur(10px);
-          color: $background-card;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid $border;
+          border-radius: 8px;
+          color: $text-muted;
           width: 100%;
-          height: 44px;
+          height: 38px;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           gap: 8px;
-          transition: all 0.3s ease;
+          transition: background 0.2s ease, border-color 0.2s ease;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: $hover-bg;
+            border-color: rgba(168,85,247,0.25);
+            color: $text;
           }
 
-          .flag-icon {
-            font-size: 20px;
+          .flag-icon { font-size: 18px; flex-shrink: 0; }
+          .lang-name {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 500;
+            color: $text-muted;
+            letter-spacing: 0.3px;
+            text-align: left;
+            transition: color 0.2s ease;
           }
+          mat-icon { font-size: 18px; width: 18px; height: 18px; flex-shrink: 0; }
 
-          mat-icon {
-            margin-left: auto;
-          }
+          &:hover .lang-name { color: $text; }
         }
       }
     }
 
-    // Navigation Menu
+    // ===== NAVIGATION =====
     mat-nav-list {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 12px;
+      padding: 12px 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(168,85,247,0.15) transparent;
 
-      // Custom scrollbar
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
+      &::-webkit-scrollbar { width: 4px; }
+      &::-webkit-scrollbar-track { background: transparent; }
       &::-webkit-scrollbar-thumb {
-        background: rgba($primary-color, 0.2);
-        border-radius: 3px;
-
-        &:hover {
-          background: rgba($primary-color, 0.3);
-        }
+        background: rgba(168,85,247,0.15);
+        border-radius: 2px;
       }
 
-      // Section Title
+      // Section title
       .nav-section-title {
-        color: $text-secondary;
-        font-size: 11px;
+        color: $text-dim;
+        font-size: 10px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        padding: 16px 12px 8px;
-        margin-top: 8px;
+        letter-spacing: 1.5px;
+        padding: 14px 10px 6px;
+        margin-top: 4px;
 
-        &:first-child {
-          margin-top: 0;
-        }
+        &:first-child { margin-top: 0; }
       }
 
-      // Navigation Items
+      // Nav items
       a[mat-list-item] {
-        border-radius: 12px;
-        margin-bottom: 4px;
-        height: 48px;
-        color: $text-primary;
-        transition: all 0.3s ease;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        height: 44px;
+        transition: background 0.2s ease;
         position: relative;
-        overflow: hidden;
 
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 0;
-          height: 100%;
-          background: linear-gradient(90deg, $primary-color 0%, transparent 100%);
-          transition: width 0.3s ease;
+        // Force white text through Material's internal DOM
+        ::ng-deep .mdc-list-item__primary-text,
+        ::ng-deep .mat-mdc-list-item-unscoped-content {
+          color: #ffffff !important;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: 0.2px;
         }
 
         mat-icon[matListItemIcon] {
-          color: $text-secondary;
-          margin-right: 16px;
-          transition: all 0.3s ease;
+          color: rgba(255, 255, 255, 0.4);
+          margin-right: 12px;
+          transition: color 0.2s ease, transform 0.2s ease;
+          font-size: 20px;
+          width: 20px; height: 20px;
         }
 
         span[matListItemTitle] {
-          font-size: 14px;
-          font-weight: 500;
-          position: relative;
-          z-index: 1;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: 0.2px;
+          color: #ffffff;
         }
 
         &:hover:not(.active) {
-          background-color: $hover-color;
+          background: $hover-bg;
+
+          ::ng-deep .mdc-list-item__primary-text,
+          ::ng-deep .mat-mdc-list-item-unscoped-content {
+            color: #ffffff !important;
+          }
 
           mat-icon[matListItemIcon] {
-            color: $primary-color;
-            transform: translateX(4px);
+            color: $neon-purple;
+            transform: translateX(3px);
           }
         }
 
-        // Active State
+        // Active state — neon glow
         &.active {
-          background: linear-gradient(
-            135deg,
-            rgba($primary-color, 0.15) 0%,
-            rgba($accent-color, 0.1) 100%
-          );
-          color: $primary-color;
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba($primary-color, 0.15);
+          background: rgba(168,85,247,0.15) !important;
+          box-shadow: inset 0 0 24px rgba(168,85,247,0.06);
 
           &::before {
-            width: 4px;
+            content: '';
+            position: absolute;
+            left: 0; top: 15%; bottom: 15%;
+            width: 3px;
+            background: $neon-purple;
+            border-radius: 0 3px 3px 0;
+            box-shadow: 0 0 10px $neon-purple, 0 0 20px rgba(168,85,247,0.5);
           }
 
           mat-icon[matListItemIcon] {
-            color: $primary-color;
-            transform: scale(1.1);
+            color: $neon-purple !important;
+            filter: drop-shadow(0 0 4px rgba(168,85,247,0.6));
+          }
+
+          ::ng-deep .mdc-list-item__primary-text,
+          ::ng-deep .mat-mdc-list-item-unscoped-content {
+            color: $neon-purple !important;
+            font-weight: 600 !important;
           }
 
           span[matListItemTitle] {
-            color: $primary-color;
+            color: $neon-purple;
+            font-weight: 600;
           }
         }
 
-        // Logout Item
+        // Logout
         &.logout-item {
-          margin-top: auto;
-          background-color: rgba($error-color, 0.05);
-          border: 1px solid rgba($error-color, 0.1);
+          margin-top: 4px;
+          border: 1px solid rgba(248,113,113,0.1);
 
-          mat-icon[matListItemIcon] {
-            color: $error-color;
+          mat-icon[matListItemIcon] { color: rgba(248,113,113,0.55); }
+
+          ::ng-deep .mdc-list-item__primary-text,
+          ::ng-deep .mat-mdc-list-item-unscoped-content {
+            color: rgba(248,113,113,0.8) !important;
           }
 
-          span[matListItemTitle] {
-            color: $error-color;
-          }
+          span[matListItemTitle] { color: rgba(248,113,113,0.8); }
 
           &:hover {
-            background: linear-gradient(
-              135deg,
-              rgba($error-color, 0.15) 0%,
-              rgba($error-color, 0.1) 100%
-            );
-            border-color: rgba($error-color, 0.3);
-            transform: translateX(4px);
+            background: rgba(248,113,113,0.07);
+            border-color: rgba(248,113,113,0.2);
 
             mat-icon[matListItemIcon] {
-              transform: translateX(4px) rotate(-10deg);
+              color: $error-color;
+              transform: translateX(3px);
             }
+
+            ::ng-deep .mdc-list-item__primary-text,
+            ::ng-deep .mat-mdc-list-item-unscoped-content {
+              color: $error-color !important;
+            }
+
+            span[matListItemTitle] { color: $error-color; }
           }
         }
       }
 
       // Divider
       mat-divider {
-        margin: 16px 0;
-        background-color: $border-color;
+        margin: 10px 0;
+        border-color: $border !important;
       }
     }
   }
 
-  // Main Content
+  // ===== MAIN CONTENT =====
   .main-content {
-    background: linear-gradient(135deg, #f0f5fb 0%, #e3ecf7 100%);
+    background: $content-bg;
     min-height: 100vh;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168,85,247,0.12) transparent;
 
-    // Custom scrollbar
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #e3ecf7;
-    }
-
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
     &::-webkit-scrollbar-thumb {
-      background: rgba($primary-color, 0.3);
-      border-radius: 4px;
-
-      &:hover {
-        background: rgba($primary-color, 0.5);
-      }
+      background: rgba(168,85,247,0.12);
+      border-radius: 3px;
+      &:hover { background: rgba(168,85,247,0.2); }
     }
   }
 }
 
-// Language Menu
-.mat-mdc-menu-panel {
-  max-width: 240px !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 24px rgba(73, 118, 181, 0.15) !important;
+// ===== LANGUAGE MENU =====
+::ng-deep .mat-mdc-menu-panel {
+  max-width: 220px !important;
+  border-radius: 10px !important;
+  background: #0c0c1a !important;
+  border: 1px solid rgba(168,85,247,0.2) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+
+  // Material CSS varijable za tekst unutar meni stavki
+  --mat-menu-item-label-text-color: rgba(255,255,255,0.75);
+  --mat-menu-item-icon-color: rgba(255,255,255,0.4);
 
   .mat-mdc-menu-content {
-    padding: 8px !important;
+    padding: 6px !important;
 
     button.mat-mdc-menu-item {
-      border-radius: 8px;
-      margin-bottom: 4px;
-      height: 44px;
+      border-radius: 7px;
+      margin-bottom: 2px;
+      height: 40px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      transition: all 0.2s ease;
+      gap: 10px;
+      transition: background 0.2s ease;
+      background: transparent;
 
-      &:last-child {
-        margin-bottom: 0;
+      &:last-child { margin-bottom: 0; }
+
+      // Override Material-ovog internog tekst elementa
+      ::ng-deep .mdc-list-item__primary-text {
+        color: rgba(255,255,255,0.75) !important;
+        font-size: 13px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
       }
 
-      .flag-icon {
-        font-size: 20px;
-      }
-
-      span {
-        font-size: 14px;
-        font-weight: 500;
-      }
+      .flag-icon { font-size: 18px; flex-shrink: 0; }
 
       .check-icon {
         margin-left: auto;
-        color: $success-color;
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+        color: $neon-purple;
+        font-size: 16px; width: 16px; height: 16px;
+        filter: drop-shadow(0 0 4px rgba(168,85,247,0.6));
       }
 
+      // Aktivni jezik
       &.active-lang {
-        background: linear-gradient(
-          135deg,
-          rgba($primary-color, 0.1) 0%,
-          rgba($accent-color, 0.05) 100%
-        );
-        color: $primary-color;
-        font-weight: 600;
+        background: rgba(168,85,247,0.14) !important;
+        border: 1px solid rgba(168,85,247,0.25);
+
+        ::ng-deep .mdc-list-item__primary-text {
+          color: $neon-purple !important;
+          font-weight: 600 !important;
+        }
       }
 
-      &:hover {
-        background-color: $hover-color;
+      &:hover:not(.active-lang) {
+        background: rgba(255,255,255,0.05) !important;
+
+        ::ng-deep .mdc-list-item__primary-text {
+          color: #ffffff !important;
+        }
       }
     }
   }
 }
 
-// Responsive Design
+// ===== RESPONSIVE =====
 @media (max-width: 1024px) {
-  .sidenav-container {
-    .sidenav {
-      width: 240px;
+  .sidenav-container .sidenav {
+    width: 240px;
 
-      .sidebar-header {
-        padding: 20px 16px;
+    .sidebar-header { padding: 20px 16px; }
 
-        .user-info {
-          .user-avatar {
-            width: 48px;
-            height: 48px;
+    mat-nav-list {
+      padding: 10px 8px;
 
-            mat-icon {
-              font-size: 30px;
-              width: 30px;
-              height: 30px;
-            }
-          }
-
-          .user-details .user-email {
-            font-size: 13px;
-          }
-        }
-      }
-
-      mat-nav-list {
-        padding: 12px 8px;
-
-        a[mat-list-item] {
-          height: 44px;
-
-          mat-icon[matListItemIcon] {
-            margin-right: 12px;
-          }
-
-          span[matListItemTitle] {
-            font-size: 13px;
-          }
-        }
+      a[mat-list-item] {
+        height: 42px;
+        span[matListItemTitle] { font-size: 12px; }
       }
     }
   }
 }
 
 @media (max-width: 768px) {
-  .sidenav-container {
-    .sidenav {
-      position: fixed;
-      z-index: 1000;
-    }
-  }
-}
-
-// Animations
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.sidenav {
-  animation: slideIn 0.3s ease-out;
-}
-
-// Dark Mode Support (optional)
-@media (prefers-color-scheme: dark) {
-  .sidenav-container {
-    background: linear-gradient(135deg, #1a1f2e 0%, #242b3d 100%);
-
-    .sidenav {
-      background: #1e2530;
-      border-right-color: #3a4255;
-
-      .sidebar-header {
-        background: linear-gradient(
-          135deg,
-          darken($primary-color, 15%) 0%,
-          darken($primary-dark, 15%) 100%
-        );
-      }
-
-      mat-nav-list {
-        a[mat-list-item] {
-          color: #e4e7eb;
-
-          &:hover:not(.active) {
-            background-color: #2d3548;
-          }
-
-          &.active {
-            background: linear-gradient(
-              135deg,
-              rgba($primary-color, 0.25) 0%,
-              rgba($accent-color, 0.15) 100%
-            );
-          }
-        }
-
-        .nav-section-title {
-          color: #8891a0;
-        }
-      }
-    }
-
-    .main-content {
-      background: linear-gradient(135deg, #1a1f2e 0%, #242b3d 100%);
-    }
+  .sidenav-container .sidenav {
+    position: fixed;
+    z-index: 1000;
   }
 }

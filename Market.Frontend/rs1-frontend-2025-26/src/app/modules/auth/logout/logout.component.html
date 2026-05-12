@@ -1,26 +1,35 @@
 <div class="logout-wrapper" @fadeInUp>
-  <mat-card class="logout-card">
-    <mat-card-header>
-      <div class="header-icon">
-        <mat-icon>logout</mat-icon>
-      </div>
-      <mat-card-title>{{ 'AUTH.LOGOUT.TITLE' | translate }}</mat-card-title>
-    </mat-card-header>
 
-    <mat-card-content>
-      <div class="logout-icon-container">
-        <mat-icon class="logout-icon">check_circle</mat-icon>
-      </div>
+  <!-- Shader background (same blobs as login) -->
+  <div class="logout-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
 
-      <p class="logout-message">{{ 'AUTH.LOGOUT.MESSAGE' | translate }}</p>
+  <div class="logout-card">
 
-      <div class="logout-progress">
-        <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
-        <div class="logout-countdown">
-          <mat-icon class="countdown-icon">schedule</mat-icon>
-          <span>{{ 'AUTH.LOGOUT.REDIRECT_IN' | translate : { seconds: countdownSeconds } }}</span>
-        </div>
+    <!-- Animated icon -->
+    <div class="icon-ring">
+      <div class="ring ring-outer"></div>
+      <div class="ring ring-inner"></div>
+      <mat-icon class="power-icon">power_settings_new</mat-icon>
+    </div>
+
+    <h2 class="logout-title">{{ 'AUTH.LOGOUT.TITLE' | translate }}</h2>
+    <p class="logout-message">{{ 'AUTH.LOGOUT.MESSAGE' | translate }}</p>
+
+    <!-- Progress & countdown -->
+    <div class="logout-progress">
+      <div class="progress-track">
+        <div class="progress-fill"></div>
       </div>
-    </mat-card-content>
-  </mat-card>
+      <div class="countdown">
+        <mat-icon>schedule</mat-icon>
+        <span>{{ 'AUTH.LOGOUT.REDIRECT_IN' | translate : { seconds: countdownSeconds } }}</span>
+      </div>
+    </div>
+
+  </div>
 </div>

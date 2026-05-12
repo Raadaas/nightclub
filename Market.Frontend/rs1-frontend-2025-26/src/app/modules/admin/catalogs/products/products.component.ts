@@ -39,6 +39,7 @@ export class ProductsComponent
   constructor() {
     super();
     this.request = new ListProductsRequest();
+    this.request.paging.pageSize = 5;
   }
 
   ngOnInit(): void {
