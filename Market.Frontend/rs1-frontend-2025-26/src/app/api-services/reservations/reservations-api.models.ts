@@ -47,3 +47,15 @@ export interface ListReservationsQueryDto {
  * Paged response for GET /Reservations
  */
 export type ListReservationsResponse = PageResult<ListReservationsQueryDto>;
+
+// === COMMANDS (WRITE) ===
+
+export interface CreateReservationCommand {
+  eventId: number;
+  clubTableId: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
+  numberOfGuests: number;
+  note?: string | null;
+}

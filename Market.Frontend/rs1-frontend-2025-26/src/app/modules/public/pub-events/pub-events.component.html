@@ -1,0 +1,97 @@
+<div class="pub-events">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="page-inner">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h1><span class="gradient-text">Događaji</span></h1>
+      <p>Pogledajte raspored nadolazećih noći i osigurajte svoje mjesto</p>
+    </div>
+
+    <!-- Tabs + Search row -->
+    <div class="controls-row">
+      <div class="tab-group">
+        <button class="tab-btn" [class.active]="activeTab === 'upcoming'" (click)="setTab('upcoming')">
+          <mat-icon>event_available</mat-icon>
+          Nadolazeći
+          <span class="tab-count" *ngIf="!isLoading">{{ upcoming.length }}</span>
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'past'" (click)="setTab('past')">
+          <mat-icon>history</mat-icon>
+          Prošli
+          <span class="tab-count" *ngIf="!isLoading">{{ past.length }}</span>
+        </button>
+      </div>
+
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          placeholder="Pretraži..."
+          [(ngModel)]="search"
+          (input)="onSearch()"
+        />
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner"></div>
+      Učitavanje događaja...
+    </div>
+
+    <!-- Empty -->
+    <div class="empty" *ngIf="!isLoading && filtered.length === 0">
+      <mat-icon>{{ activeTab === 'upcoming' ? 'event_busy' : 'history_toggle_off' }}</mat-icon>
+      <p>{{ activeTab === 'upcoming' ? 'Nema nadolazećih događaja' : 'Nema prošlih događaja' }}</p>
+    </div>
+
+    <!-- Events grid -->
+    <div class="events-grid" *ngIf="!isLoading && filtered.length > 0">
+      <a class="event-card" *ngFor="let ev of filtered" [routerLink]="['/events', ev.id]">
+
+        <div class="card-img" [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : 'none'">
+          <div class="card-img-placeholder" *ngIf="!ev.imageUrl">
+            <mat-icon>nightlife</mat-icon>
+          </div>
+          <div class="card-badge past-badge" *ngIf="activeTab === 'past'">Prošlo</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="meta-date">
+              <mat-icon>calendar_today</mat-icon>
+              {{ formatDate(ev.date) }}
+            </span>
+            <span class="meta-time">
+              <mat-icon>schedule</mat-icon>
+              Vrata: {{ formatTime(ev.doorsOpenAt) }}
+            </span>
+          </div>
+
+          <h2 class="card-title">{{ ev.title }}</h2>
+
+          <div class="card-artist" *ngIf="ev.mainArtist">
+            <mat-icon>mic</mat-icon>
+            {{ ev.mainArtist }}
+          </div>
+
+          <div class="card-footer" *ngIf="activeTab === 'upcoming'">
+            <span class="reserve-btn">
+              <mat-icon>table_restaurant</mat-icon>
+              Rezerviši sto
+            </span>
+          </div>
+        </div>
+
+      </a>
+    </div>
+
+  </div>
+</div>

@@ -49,6 +49,12 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+// Ensure Angular component host elements are block-level.
+app-home, app-pub-events, app-pub-gallery, app-pricing, app-about,
+app-event-detail, app-client-home, app-client-settings,
+app-register, app-login {
+  display: block;
+}
 
 // Add this to your global styles.scss
 

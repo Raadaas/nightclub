@@ -29,6 +29,7 @@ public class GalleryController(ISender sender) : ControllerBase
         await sender.Send(new DeleteGalleryImageCommand { Id = id }, ct);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<PageResult<ListGalleryImagesQueryDto>> List([FromQuery] ListGalleryImagesQuery query, CancellationToken ct)
     {

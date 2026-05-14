@@ -1,9 +1,14 @@
 <mat-sidenav-container class="sidenav-container">
+
   <!-- SIDEBAR -->
-  <mat-sidenav mode="side" opened class="sidenav">
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="!isMobile"
+    class="sidenav"
+  >
     <!-- SIDEBAR HEADER WITH USER INFO -->
     <div class="sidebar-header">
-      <!-- User Info -->
       <div class="user-info">
         <div class="user-avatar">
           <mat-icon>account_circle</mat-icon>
@@ -56,62 +61,52 @@
 
     <!-- NAVIGATION MENU -->
     <mat-nav-list>
-      <!-- CATALOG SECTION -->
-      <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.CATALOG' | translate }}
-      </div>
+      <div class="nav-section-title">{{ 'ADMIN_PANEL.MENU.CATALOG' | translate }}</div>
 
-      <a mat-list-item routerLink="/admin/menu-categories" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/menu-categories" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>restaurant_menu</mat-icon>
         <span matListItemTitle>Kategorije menija</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/menu-items" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/menu-items" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>local_bar</mat-icon>
         <span matListItemTitle>Stavke menija</span>
       </a>
 
       <mat-divider></mat-divider>
 
-      <!-- NIGHTCLUB SECTION -->
-      <div class="nav-section-title">
-        Nightclub
-      </div>
+      <div class="nav-section-title">Nightclub</div>
 
-      <a mat-list-item routerLink="/admin/club-tables" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/club-tables" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>table_restaurant</mat-icon>
         <span matListItemTitle>Club Tables</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/events" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/events" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>celebration</mat-icon>
         <span matListItemTitle>Events</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/reservations" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/reservations" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>event_seat</mat-icon>
         <span matListItemTitle>Reservations</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/gallery" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/gallery" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>photo_library</mat-icon>
         <span matListItemTitle>Galerija</span>
       </a>
 
       <mat-divider></mat-divider>
 
-      <!-- SYSTEM SECTION -->
-      <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.SYSTEM' | translate }}
-      </div>
+      <div class="nav-section-title">{{ 'ADMIN_PANEL.MENU.SYSTEM' | translate }}</div>
 
-      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active">
+      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>tune</mat-icon>
         <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.SETTINGS' | translate }}</span>
       </a>
 
-      <!-- LOGOUT -->
-      <a mat-list-item routerLink="/auth/logout" routerLinkActive="active" class="logout-item">
+      <a mat-list-item routerLink="/auth/logout" routerLinkActive="active" class="logout-item" (click)="closeIfMobile()">
         <mat-icon matListItemIcon>output</mat-icon>
         <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.LOGOUT' | translate }}</span>
       </a>
@@ -120,6 +115,24 @@
 
   <!-- MAIN CONTENT -->
   <mat-sidenav-content class="main-content">
+
+    <!-- Mobile top bar -->
+    <div class="mobile-header" *ngIf="isMobile">
+      <button mat-icon-button class="mobile-menu-btn" (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="mobile-brand">
+        <mat-icon>nightlife</mat-icon>
+        <span>NEON ADMIN</span>
+      </div>
+      <div class="mobile-header-right">
+        <div class="mobile-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+      </div>
+    </div>
+
     <router-outlet></router-outlet>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

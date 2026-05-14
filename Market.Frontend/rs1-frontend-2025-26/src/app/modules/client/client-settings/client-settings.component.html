@@ -1,0 +1,157 @@
+<div class="container">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="header-card">
+    <h1>Moj nalog</h1>
+  </div>
+
+  <div *ngIf="isLoadingProfile" class="loading">Učitavanje profila...</div>
+  <div *ngIf="profileError && !isLoadingProfile" class="load-error">
+    <mat-icon>error_outline</mat-icon> {{ profileError }}
+  </div>
+
+  <div *ngIf="!isLoadingProfile && !profileError" class="content-grid">
+
+    <div class="column-left">
+
+      <div class="profile-card">
+        <div class="avatar">
+          <mat-icon *ngIf="getInitials() === '?'" class="avatar-default-icon">person</mat-icon>
+          <span *ngIf="getInitials() !== '?'">{{ getInitials() }}</span>
+        </div>
+        <div class="profile-info">
+          <div class="profile-name">{{ profile?.firstname }} {{ profile?.lastname }}</div>
+          <div class="profile-email">{{ profile?.email }}</div>
+          <div class="role-badge">
+            <mat-icon class="role-icon">person</mat-icon>
+            Korisnik
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <mat-icon class="section-icon">person_edit</mat-icon>
+          <span>Uredi profil</span>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmitProfile()">
+          <div *ngIf="profileFormError" class="error-banner">
+            <mat-icon>error_outline</mat-icon> {{ profileFormError }}
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Ime</mat-label>
+              <input matInput formControlName="firstname" placeholder="Vaše ime" />
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="hasError(profileForm, 'firstname')">Ime je obavezno</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Prezime</mat-label>
+              <input matInput formControlName="lastname" placeholder="Vaše prezime" />
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="hasError(profileForm, 'lastname')">Prezime je obavezno</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email adresa</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="vas@email.com" />
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="hasError(profileForm, 'email')">
+              <ng-container *ngIf="profileForm.get('email')?.hasError('required')">Email je obavezan</ng-container>
+              <ng-container *ngIf="profileForm.get('email')?.hasError('email')">Unesite ispravan email</ng-container>
+            </mat-error>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button type="submit" mat-raised-button class="save-btn" [disabled]="profileForm.invalid || isSubmittingProfile">
+              <mat-spinner *ngIf="isSubmittingProfile" diameter="16"></mat-spinner>
+              <mat-icon *ngIf="!isSubmittingProfile">save</mat-icon>
+              Spremi izmjene
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="column-right">
+      <div class="section-card">
+        <div class="section-header">
+          <mat-icon class="section-icon">lock_reset</mat-icon>
+          <span>Promjena lozinke</span>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+          <div *ngIf="passwordFormError" class="error-banner">
+            <mat-icon>error_outline</mat-icon> {{ passwordFormError }}
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Trenutna lozinka</mat-label>
+            <input matInput [type]="showCurrentPw ? 'text' : 'password'" formControlName="currentPassword" placeholder="Unesite trenutnu lozinku" />
+            <button type="button" mat-icon-button matSuffix (click)="showCurrentPw = !showCurrentPw">
+              <mat-icon>{{ showCurrentPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasError(passwordForm, 'currentPassword')">Obavezno polje</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nova lozinka</mat-label>
+            <input matInput [type]="showNewPw ? 'text' : 'password'" formControlName="newPassword" placeholder="Min. 6 znakova" />
+            <button type="button" mat-icon-button matSuffix (click)="showNewPw = !showNewPw">
+              <mat-icon>{{ showNewPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasError(passwordForm, 'newPassword')">
+              <ng-container *ngIf="passwordForm.get('newPassword')?.hasError('required')">Obavezno</ng-container>
+              <ng-container *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">Min. 6 znakova</ng-container>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Potvrdite novu lozinku</mat-label>
+            <input matInput [type]="showConfirmPw ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Ponovite novu lozinku" />
+            <button type="button" mat-icon-button matSuffix (click)="showConfirmPw = !showConfirmPw">
+              <mat-icon>{{ showConfirmPw ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasError(passwordForm, 'confirmPassword')">Obavezno polje</mat-error>
+            <mat-error *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">Lozinke se ne poklapaju</mat-error>
+          </mat-form-field>
+
+          <div class="password-hint" *ngIf="passwordForm.get('newPassword')?.value">
+            <div class="hint-label">Jačina:</div>
+            <div class="strength-bar">
+              <div class="strength-fill"
+                [class.weak]="passwordForm.get('newPassword')!.value.length < 8"
+                [class.medium]="passwordForm.get('newPassword')!.value.length >= 8 && passwordForm.get('newPassword')!.value.length < 12"
+                [class.strong]="passwordForm.get('newPassword')!.value.length >= 12">
+              </div>
+            </div>
+            <span class="hint-text"
+              [class.weak-text]="passwordForm.get('newPassword')!.value.length < 8"
+              [class.medium-text]="passwordForm.get('newPassword')!.value.length >= 8 && passwordForm.get('newPassword')!.value.length < 12"
+              [class.strong-text]="passwordForm.get('newPassword')!.value.length >= 12">
+              {{ passwordForm.get('newPassword')!.value.length < 8 ? 'Slaba' : passwordForm.get('newPassword')!.value.length < 12 ? 'Srednja' : 'Jaka' }}
+            </span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" mat-raised-button class="pw-btn" [disabled]="passwordForm.invalid || isSubmittingPassword">
+              <mat-spinner *ngIf="isSubmittingPassword" diameter="16"></mat-spinner>
+              <mat-icon *ngIf="!isSubmittingPassword">lock_reset</mat-icon>
+              Promijeni lozinku
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

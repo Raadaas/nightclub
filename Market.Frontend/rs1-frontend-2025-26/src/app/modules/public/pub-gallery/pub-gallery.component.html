@@ -1,0 +1,142 @@
+<div class="pub-gallery">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="page-inner">
+
+    <!-- ===== EVENTS LIST VIEW ===== -->
+    <ng-container *ngIf="view === 'events'">
+
+      <div class="header-card">
+        <div class="header-card-content">
+          <h1>Galerija</h1>
+          <div class="search-wrap">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input
+              class="search-input"
+              placeholder="Pretraži evente..."
+              [(ngModel)]="searchTerm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="loading-block" *ngIf="isLoading">
+        Učitavanje...
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && filteredEvents.length === 0">
+        <mat-icon>photo_library</mat-icon>
+        <p>Nema dostupnih evenata.</p>
+      </div>
+
+      <div class="events-grid" *ngIf="!isLoading && filteredEvents.length > 0">
+        <div
+          class="event-card"
+          *ngFor="let event of filteredEvents"
+          (click)="openEvent(event)"
+        >
+          <div class="card-cover">
+            <img
+              *ngIf="event.imageUrl"
+              [src]="event.imageUrl"
+              [alt]="event.title"
+              class="cover-img"
+            />
+            <div *ngIf="!event.imageUrl" class="cover-placeholder">
+              <mat-icon>image_not_supported</mat-icon>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="card-title">{{ event.title }}</div>
+            <div class="card-meta">
+              <span class="meta-item">
+                <mat-icon class="meta-icon">calendar_today</mat-icon>
+                {{ formatDate(event.date) }}
+              </span>
+              <span class="meta-item" *ngIf="event.mainArtist">
+                <mat-icon class="meta-icon">mic</mat-icon>
+                {{ event.mainArtist }}
+              </span>
+            </div>
+            <div class="card-action">
+              <mat-icon>photo_library</mat-icon>
+              Pogledaj galeriju
+              <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+
+    <!-- ===== EVENT DETAIL VIEW ===== -->
+    <ng-container *ngIf="view === 'detail'">
+
+      <div class="header-card header-card--detail">
+        <div class="header-left">
+          <button mat-icon-button class="back-btn" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div class="header-titles">
+            <div class="header-breadcrumb">
+              <span class="breadcrumb-link" (click)="goBack()">Galerija</span>
+              <mat-icon class="breadcrumb-sep">chevron_right</mat-icon>
+              <span class="breadcrumb-current">{{ selectedEvent?.title }}</span>
+            </div>
+            <h1>
+              {{ selectedEvent?.title }}
+              <span class="event-date" *ngIf="selectedEvent">{{ formatDate(selectedEvent.date) }}</span>
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="loading-block" *ngIf="isLoading">
+        Učitavanje galerije...
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && images.length === 0">
+        <mat-icon>photo_camera</mat-icon>
+        <p>Nema slika u galeriji ovog eventa.</p>
+      </div>
+
+      <div class="image-grid" *ngIf="!isLoading && images.length > 0">
+        <div
+          class="image-card"
+          *ngFor="let img of images"
+          (click)="openLightbox(img.imageUrl)"
+        >
+          <div class="img-wrap">
+            <img [src]="img.imageUrl" [alt]="img.caption || 'Galerija'" class="thumb" />
+            <div class="img-overlay">
+              <mat-icon>zoom_in</mat-icon>
+            </div>
+          </div>
+          <div class="img-info" *ngIf="img.caption">
+            <span class="img-caption">{{ img.caption }}</span>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" *ngIf="lightboxImage" (click)="closeLightbox()">
+    <div class="lightbox-inner" (click)="$event.stopPropagation()">
+      <button class="lb-close" (click)="closeLightbox()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <img [src]="lightboxImage" alt="Galerija" />
+    </div>
+  </div>
+
+</div>

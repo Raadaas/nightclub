@@ -738,12 +738,12 @@ public static class DynamicDataSeeder
         var pastEvent = events.FirstOrDefault(e => e.Title == "Goodbye Summer");
 
         context.GalleryImages.AddRange(
-            new GalleryImageEntity { ImageUrl = "/gallery/club-main-floor.jpg", Caption = "Main floor noću", DisplayOrder = 1, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
-            new GalleryImageEntity { ImageUrl = "/gallery/vip-zone.jpg", Caption = "VIP zona", DisplayOrder = 2, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
-            new GalleryImageEntity { ImageUrl = "/gallery/bar-area.jpg", Caption = "Bar area", DisplayOrder = 3, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
-            new GalleryImageEntity { ImageUrl = "/gallery/dj-booth.jpg", Caption = "DJ booth", DisplayOrder = 4, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
-            new GalleryImageEntity { ImageUrl = "/gallery/past-event-1.jpg", Caption = "Goodbye Summer — crowd", DisplayOrder = 1, IsEnabled = true, EventId = pastEvent?.Id, CreatedAtUtc = DateTime.UtcNow },
-            new GalleryImageEntity { ImageUrl = "/gallery/past-event-2.jpg", Caption = "Goodbye Summer — DJ set", DisplayOrder = 2, IsEnabled = true, EventId = pastEvent?.Id, CreatedAtUtc = DateTime.UtcNow }
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/clubmain/900/600", Caption = "Main floor noću", DisplayOrder = 1, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/vipzone/900/700", Caption = "VIP zona", DisplayOrder = 2, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/bararea/900/550", Caption = "Bar area", DisplayOrder = 3, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/djbooth/900/800", Caption = "DJ booth", DisplayOrder = 4, IsEnabled = true, EventId = null, CreatedAtUtc = DateTime.UtcNow },
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/pastevent1/900/650", Caption = "Goodbye Summer — crowd", DisplayOrder = 1, IsEnabled = true, EventId = pastEvent?.Id, CreatedAtUtc = DateTime.UtcNow },
+            new GalleryImageEntity { ImageUrl = "https://picsum.photos/seed/pastevent2/900/600", Caption = "Goodbye Summer — DJ set", DisplayOrder = 2, IsEnabled = true, EventId = pastEvent?.Id, CreatedAtUtc = DateTime.UtcNow }
         );
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: gallery images added.");

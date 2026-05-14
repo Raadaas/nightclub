@@ -416,6 +416,12 @@ $hover-bg:    rgba(168, 85, 247, 0.06);
 }
 
 @media (max-width: 768px) {
-  .container { padding: 16px; }
+  .container { padding: 12px; }
+  .header-card { padding: 14px 16px; margin-bottom: 16px; }
   .mat-elevation-z8 table { display: block; overflow-x: auto; }
+  .actions-container {
+    flex-direction: column; gap: 8px;
+    .search-field { width: 100%; }
+    button[mat-raised-button] { width: 100%; justify-content: center; }
+  }
 }

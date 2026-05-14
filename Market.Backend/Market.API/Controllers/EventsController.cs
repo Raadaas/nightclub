@@ -30,12 +30,14 @@ public class EventsController(ISender sender) : ControllerBase
         await sender.Send(new DeleteEventCommand { Id = id }, ct);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     public async Task<GetEventByIdQueryDto> GetById(int id, CancellationToken ct)
     {
         return await sender.Send(new GetEventByIdQuery { Id = id }, ct);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<PageResult<ListEventsQueryDto>> List([FromQuery] ListEventsQuery query, CancellationToken ct)
     {

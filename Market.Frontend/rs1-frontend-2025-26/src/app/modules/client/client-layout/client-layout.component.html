@@ -1,0 +1,46 @@
+<div class="client-shell">
+
+  <nav class="navbar">
+    <div class="nav-inner">
+
+      <a class="nav-brand" routerLink="/client">
+        <mat-icon>nightlife</mat-icon>
+        <span>NEON CLUB</span>
+      </a>
+
+      <div class="nav-links" [class.open]="menuOpen">
+        <a routerLink="/client" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+           (click)="menuOpen=false">
+          <mat-icon>dashboard</mat-icon> Početna
+        </a>
+        <a routerLink="/client/settings" routerLinkActive="active"
+           (click)="menuOpen=false">
+          <mat-icon>manage_accounts</mat-icon> Moj nalog
+        </a>
+        <a routerLink="/events" (click)="menuOpen=false">
+          <mat-icon>event</mat-icon> Događaji
+        </a>
+      </div>
+
+      <div class="nav-actions">
+        <div class="user-chip" *ngIf="profileName">
+          <mat-icon>person</mat-icon>
+          <span>{{ profileName }}</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Odjava</span>
+        </button>
+        <button class="burger" (click)="menuOpen=!menuOpen" aria-label="Menu">
+          <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="client-main">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

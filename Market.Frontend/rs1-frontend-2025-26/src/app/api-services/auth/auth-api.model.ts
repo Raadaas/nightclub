@@ -57,3 +57,10 @@ export interface RefreshTokenCommandDto {
 export interface LogoutCommand {
   refreshToken: string;
 }
+
+export interface RegisterCommand {
+  firstname: string;
+  lastname:  string;
+  email:     string;
+  password:  string;
+}

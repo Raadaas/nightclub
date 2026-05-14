@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ListReservationsRequest,
-  ListReservationsResponse
+  ListReservationsResponse,
+  CreateReservationCommand,
 } from './reservations-api.models';
 import { buildHttpParams } from '../../core/models/build-http-params';
 
@@ -25,6 +26,10 @@ export class ReservationsApiService {
     return this.http.get<ListReservationsResponse>(this.baseUrl, {
       params,
     });
+  }
+
+  create(payload: CreateReservationCommand): Observable<number> {
+    return this.http.post<number>(this.baseUrl, payload);
   }
 
   /**

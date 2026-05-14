@@ -1,0 +1,206 @@
+<div class="event-detail">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Loading -->
+  <div class="state-wrap" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Učitavanje događaja...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="state-wrap error" *ngIf="loadError && !isLoading">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ loadError }}</p>
+    <a routerLink="/events" class="btn-outline">Nazad na događaje</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content" *ngIf="!isLoading && !loadError && event">
+
+    <!-- Back link -->
+    <div class="breadcrumb">
+      <a routerLink="/events">
+        <mat-icon>arrow_back</mat-icon>
+        Svi događaji
+      </a>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero-card"
+         [style.background-image]="event.imageUrl ? 'url(' + event.imageUrl + ')' : 'none'">
+      <div class="hero-overlay"></div>
+      <div class="hero-body">
+        <div class="hero-badges">
+          <span class="badge purple">
+            <mat-icon>calendar_today</mat-icon>
+            {{ formatDate(event.date) }}
+          </span>
+          <span class="badge cyan">
+            <mat-icon>schedule</mat-icon>
+            Vrata: {{ formatTime(event.doorsOpenAt) }}
+          </span>
+          <span class="badge pink" *ngIf="event.mainArtist">
+            <mat-icon>mic</mat-icon>
+            {{ event.mainArtist }}
+          </span>
+        </div>
+        <h1 class="hero-title">{{ event.title }}</h1>
+        <p class="hero-desc" *ngIf="event.description">{{ event.description }}</p>
+      </div>
+    </div>
+
+    <!-- Two-col layout -->
+    <div class="main-grid">
+
+      <!-- LEFT: Table selection -->
+      <div class="col">
+        <div class="section-card">
+          <div class="card-head">
+            <mat-icon>table_restaurant</mat-icon>
+            <span>Odaberite stol</span>
+          </div>
+
+          <p class="tables-hint">Kliknite na stol koji želite rezervisati</p>
+
+          <div class="tables-grid">
+            <div
+              class="table-card"
+              *ngFor="let t of tables"
+              [class.selected]="selectedTable?.id === t.id"
+              [class.vip]="t.isVip"
+              (click)="selectTable(t)"
+            >
+              <div class="table-top">
+                <span class="table-name">{{ t.name }}</span>
+                <span class="vip-badge" *ngIf="t.isVip">VIP</span>
+              </div>
+              <div class="table-section" *ngIf="t.section">{{ t.section }}</div>
+              <div class="table-meta">
+                <span><mat-icon>group</mat-icon> do {{ t.capacity }} osoba</span>
+                <span *ngIf="t.minSpend > 0"><mat-icon>payments</mat-icon> min. {{ formatPrice(t.minSpend) }}</span>
+              </div>
+              <p class="table-desc" *ngIf="t.description">{{ t.description }}</p>
+            </div>
+          </div>
+
+          <div class="no-table-warn" *ngIf="form.touched && !selectedTable">
+            <mat-icon>warning</mat-icon> Molimo odaberite stol
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Reservation form OR success -->
+      <div class="col">
+
+        <!-- SUCCESS -->
+        <div class="success-card" *ngIf="successId !== null">
+          <div class="success-icon">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <h2>Rezervacija primljena!</h2>
+          <p>
+            Vaša rezervacija <strong>#{{ successId }}</strong> je uspješno kreirana
+            i čeka potvrdu od strane kluba.
+          </p>
+          <p class="success-note">
+            Primit ćete potvrdu na e-mail adresu koju ste naveli.
+            U slučaju pitanja, kontaktirajte nas direktno.
+          </p>
+          <div class="success-actions">
+            <a routerLink="/events" class="btn-outline">Svi događaji</a>
+            <a routerLink="/" class="btn-primary">Početna</a>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="section-card" *ngIf="successId === null">
+          <div class="card-head">
+            <mat-icon>person_add</mat-icon>
+            <span>Vaši podaci</span>
+          </div>
+
+          <div class="error-banner" *ngIf="submitError">
+            <mat-icon>error_outline</mat-icon>
+            {{ submitError }}
+          </div>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half">
+                <mat-label>Ime i prezime</mat-label>
+                <input matInput formControlName="guestName" placeholder="Vaše ime" />
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="hasError('guestName')">Ime je obavezno</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half">
+                <mat-label>Broj gostiju</mat-label>
+                <input matInput type="number" formControlName="numberOfGuests" [max]="selectedTable?.capacity ?? 20" min="1" />
+                <mat-icon matSuffix>group</mat-icon>
+                <mat-error *ngIf="hasError('numberOfGuests')">
+                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('min')">Minimum 1 gost</ng-container>
+                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('max')">Maksimum {{ selectedTable?.capacity }} gostiju za ovaj stol</ng-container>
+                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('required')">Obavezno</ng-container>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Email adresa</mat-label>
+              <input matInput type="email" formControlName="guestEmail" placeholder="vas@email.com" />
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-error *ngIf="hasError('guestEmail')">
+                <ng-container *ngIf="form.get('guestEmail')?.hasError('required')">Email je obavezan</ng-container>
+                <ng-container *ngIf="form.get('guestEmail')?.hasError('email')">Unesite ispravan email</ng-container>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Broj telefona</mat-label>
+              <input matInput formControlName="guestPhone" placeholder="+387 61 123 456" />
+              <mat-icon matSuffix>phone</mat-icon>
+              <mat-error *ngIf="hasError('guestPhone')">Telefon je obavezan</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Napomena (opcionalno)</mat-label>
+              <textarea matInput formControlName="note" rows="3" placeholder="Posebni zahtjevi, alergije..."></textarea>
+              <mat-icon matSuffix>notes</mat-icon>
+            </mat-form-field>
+
+            <!-- Selected table summary -->
+            <div class="selected-summary" *ngIf="selectedTable">
+              <mat-icon>table_restaurant</mat-icon>
+              <span>
+                Odabrano: <strong>{{ selectedTable.name }}</strong>
+                <ng-container *ngIf="selectedTable.section"> — {{ selectedTable.section }}</ng-container>
+              </span>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="btn-submit"
+                [class.loading]="isSubmitting"
+                [disabled]="isSubmitting"
+              >
+                <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+                <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+                {{ isSubmitting ? 'Slanje...' : 'Pošalji rezervaciju' }}
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

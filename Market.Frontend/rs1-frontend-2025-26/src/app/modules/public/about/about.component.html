@@ -1,0 +1,99 @@
+<div class="about-page">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="page-inner">
+
+    <div class="page-header">
+      <h1><span class="gradient-text">O nama</span></h1>
+      <p>Priča iza najuzbudljivijeg noćnog kluba u gradu</p>
+    </div>
+
+    <!-- Bottom row: info card + map -->
+    <div class="bottom-row">
+
+      <div class="info-card">
+
+        <div class="info-section">
+          <div class="info-icon purple"><mat-icon>schedule</mat-icon></div>
+          <div>
+            <h3>Radno vrijeme</h3>
+            <ul>
+              <li><span>Petak</span> <strong>23:00 – 05:00</strong></li>
+              <li><span>Subota</span> <strong>23:00 – 06:00</strong></li>
+              <li><span>Posebni događaji</span> <strong>po rasporedu</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-section">
+          <div class="info-icon cyan"><mat-icon>location_on</mat-icon></div>
+          <div>
+            <h3>Lokacija</h3>
+            <p class="info-addr">Ulica Noćnog Života 7<br>88280 Nevesinje, BiH</p>
+            <p class="info-note">Parking dostupan u neposrednoj blizini</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-section">
+          <div class="info-icon pink"><mat-icon>phone</mat-icon></div>
+          <div>
+            <h3>Kontakt</h3>
+            <ul>
+              <li><span>Telefon</span> <strong>+387 59 123 456</strong></li>
+              <li><span>Email</span> <strong>info&#64;neonclub.ba</strong></li>
+              <li><span>Instagram</span> <strong>&#64;neonclub_ba</strong></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="map-card">
+        <iframe
+          src="https://maps.google.com/maps?q=Nevesinje,Bosnia+and+Herzegovina&t=&z=14&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="100%"
+          style="border:0;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-card">
+      <div class="faq-icon">
+        <mat-icon>help_outline</mat-icon>
+      </div>
+      <div class="faq-content">
+        <h2>FAQ</h2>
+        <div class="faq-list">
+          <div
+            class="faq-item"
+            *ngFor="let faq of faqs"
+            [class.open]="faq.open"
+            (click)="toggle(faq)"
+          >
+            <div class="faq-q">
+              <span>{{ faq.q }}</span>
+              <mat-icon>{{ faq.open ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </div>
+            <div class="faq-a" *ngIf="faq.open">{{ faq.a }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

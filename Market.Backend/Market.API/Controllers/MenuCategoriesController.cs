@@ -29,6 +29,7 @@ public class MenuCategoriesController(ISender sender) : ControllerBase
         await sender.Send(new DeleteMenuCategoryCommand { Id = id }, ct);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<PageResult<ListMenuCategoriesQueryDto>> List([FromQuery] ListMenuCategoriesQuery query, CancellationToken ct)
     {

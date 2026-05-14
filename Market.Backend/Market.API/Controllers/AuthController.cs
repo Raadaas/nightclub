@@ -1,6 +1,7 @@
 ﻿using Market.Application.Modules.Auth.Commands.Login;
 using Market.Application.Modules.Auth.Commands.Logout;
 using Market.Application.Modules.Auth.Commands.Refresh;
+using Market.Application.Modules.Auth.Commands.Register;
 
 [ApiController]
 [Route("api/auth")]
@@ -25,5 +26,13 @@ public sealed class AuthController(IMediator mediator) : ControllerBase
     public async Task Logout([FromBody] LogoutCommand command, CancellationToken ct)
     {
         await mediator.Send(command, ct);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken ct)
+    {
+        await mediator.Send(command, ct);
+        return Ok(new { message = "Registracija uspješna. Možete se prijaviti." });
     }
 }

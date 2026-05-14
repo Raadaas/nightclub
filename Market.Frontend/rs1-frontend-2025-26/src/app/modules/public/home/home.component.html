@@ -1,0 +1,108 @@
+<div class="home">
+
+  <!-- Shader bg -->
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">
+        <mat-icon>music_note</mat-icon>
+        Svake subote od 23:00h
+      </div>
+      <h1 class="hero-title">
+        Dobrodošli u<br>
+        <span class="gradient-text">NEON CLUB</span>
+      </h1>
+      <p class="hero-sub">
+        Noćni klub koji redefinira zabavu. Vrhunska muzika, nezaboravna atmosfera
+        i noći koje ostavljaju trag.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/events" class="btn-primary">
+          <mat-icon>event</mat-icon>
+          Pogledaj događaje
+        </a>
+        <a routerLink="/pricing" class="btn-outline">
+          <mat-icon>restaurant_menu</mat-icon>
+          Cjenovnik
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming events -->
+  <section class="section upcoming" *ngIf="upcomingEvents.length">
+    <div class="section-inner">
+      <div class="section-head">
+        <h2>Nadolazeći <span class="gradient-text">događaji</span></h2>
+        <a routerLink="/events" class="see-all">Svi događaji <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+      <div class="events-row">
+        <a class="event-card" *ngFor="let ev of upcomingEvents" [routerLink]="['/events', ev.id]">
+          <div class="event-img" [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : 'none'">
+            <div class="event-img-placeholder" *ngIf="!ev.imageUrl">
+              <mat-icon>nightlife</mat-icon>
+            </div>
+          </div>
+          <div class="event-info">
+            <p class="event-date">{{ formatDate(ev.date) }}</p>
+            <h3 class="event-title">{{ ev.title }}</h3>
+            <p class="event-artist" *ngIf="ev.mainArtist">
+              <mat-icon>mic</mat-icon> {{ ev.mainArtist }}
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section features">
+    <div class="section-inner">
+      <div class="section-head centered">
+        <h2>Zašto <span class="gradient-text">Neon Club</span>?</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon purple"><mat-icon>music_note</mat-icon></div>
+          <h3>Vrhunska muzika</h3>
+          <p>Najpopularniji domaći i strani DJ-evi i izvođači svake sedmice.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon cyan"><mat-icon>local_bar</mat-icon></div>
+          <h3>Premium bar</h3>
+          <p>Bogata selekcija pića, koktela i rezervacija VIP stolova.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon pink"><mat-icon>auto_awesome</mat-icon></div>
+          <h3>Nezaboravna atmosfera</h3>
+          <p>Profesionalna rasvjeta, zvuk i dekoracija koja vas uvlači u noć.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon amber"><mat-icon>security</mat-icon></div>
+          <h3>Sigurnost</h3>
+          <p>Profesionalno osoblje i obezbjeđenje za vaš mir i udobnost.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="cta-inner">
+      <h2>Rezerviši svoju noć <span class="gradient-text">danas</span></h2>
+      <p>Osiguraj mjesto za nezaboravan provod. VIP stolovi i posebne ponude dostupni online.</p>
+      <a routerLink="/pricing" class="btn-primary large">
+        <mat-icon>table_restaurant</mat-icon>
+        Pogledaj ponudu
+      </a>
+    </div>
+  </section>
+
+</div>

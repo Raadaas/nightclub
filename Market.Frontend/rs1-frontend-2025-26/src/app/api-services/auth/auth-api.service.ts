@@ -7,7 +7,8 @@ import {
   LoginCommandDto,
   RefreshTokenCommand,
   RefreshTokenCommandDto,
-  LogoutCommand
+  LogoutCommand,
+  RegisterCommand,
 } from './auth-api.model';
 
 @Injectable({
@@ -39,5 +40,9 @@ export class AuthApiService {
    */
   logout(payload: LogoutCommand): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/logout`, payload);
+  }
+
+  register(payload: RegisterCommand): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/register`, payload);
   }
 }
