@@ -10,16 +10,19 @@
 
       <div class="nav-links" [class.open]="menuOpen">
         <a routerLink="/client" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
-           (click)="menuOpen=false">
-          <mat-icon>dashboard</mat-icon> Početna
-        </a>
+           (click)="menuOpen=false">Početna</a>
+        <a routerLink="/client/events" routerLinkActive="active"
+           (click)="menuOpen=false">Događaji</a>
+        <a routerLink="/client/gallery" routerLinkActive="active"
+           (click)="menuOpen=false">Galerija</a>
+        <a routerLink="/client/pricing" routerLinkActive="active"
+           (click)="menuOpen=false">Cjenovnik</a>
+        <a routerLink="/client/about" routerLinkActive="active"
+           (click)="menuOpen=false">O nama</a>
+        <a routerLink="/client/reservations" routerLinkActive="active"
+           (click)="menuOpen=false">Rezervacije</a>
         <a routerLink="/client/settings" routerLinkActive="active"
-           (click)="menuOpen=false">
-          <mat-icon>manage_accounts</mat-icon> Moj nalog
-        </a>
-        <a routerLink="/events" (click)="menuOpen=false">
-          <mat-icon>event</mat-icon> Događaji
-        </a>
+           (click)="menuOpen=false">Moj nalog</a>
       </div>
 
       <div class="nav-actions">

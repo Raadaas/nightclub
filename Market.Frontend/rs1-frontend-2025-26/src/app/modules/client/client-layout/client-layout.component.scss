@@ -33,10 +33,31 @@ $border:      rgba(168,85,247,0.18);
   a {
     display: flex; align-items: center; gap: 6px;
     text-decoration: none; color: $text-muted; font-size: 13px; font-weight: 500;
-    padding: 7px 14px; border-radius: 8px; transition: color 0.2s, background 0.2s;
+    padding: 7px 14px; border-radius: 8px; transition: color 0.2s;
+    position: relative;
     mat-icon { font-size: 16px; width: 16px; height: 16px; }
-    &:hover { color: $text; background: rgba(168,85,247,0.08); }
-    &.active { color: $neon-purple; background: rgba(168,85,247,0.1); }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 14px; right: 14px;
+      height: 2px;
+      background: linear-gradient(90deg, $neon-purple, $neon-pink);
+      box-shadow: 0 0 8px rgba(168,85,247,0.7);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &:hover {
+      color: $text;
+      &::after { transform: scaleX(1); }
+    }
+
+    &.active {
+      color: $neon-purple;
+      &::after { transform: scaleX(1); }
+    }
   }
 }
 

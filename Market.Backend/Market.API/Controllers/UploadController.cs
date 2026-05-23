@@ -9,6 +9,7 @@ public class UploadController(IWebHostEnvironment env) : ControllerBase
         new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Upload([FromForm] IFormFile file, CancellationToken ct)
     {
         if (file is null || file.Length == 0)

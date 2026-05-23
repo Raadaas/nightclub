@@ -23,7 +23,7 @@
 
     <!-- Quick actions -->
     <div class="quick-actions">
-      <a class="action-card purple" routerLink="/events">
+      <a class="action-card purple" routerLink="/client/events">
         <div class="action-icon"><mat-icon>event</mat-icon></div>
         <div class="action-info">
           <h3>Događaji</h3>
@@ -32,7 +32,7 @@
         <mat-icon class="action-arrow">arrow_forward</mat-icon>
       </a>
 
-      <a class="action-card cyan" routerLink="/gallery">
+      <a class="action-card cyan" routerLink="/client/gallery">
         <div class="action-icon"><mat-icon>photo_library</mat-icon></div>
         <div class="action-info">
           <h3>Galerija</h3>
@@ -41,7 +41,7 @@
         <mat-icon class="action-arrow">arrow_forward</mat-icon>
       </a>
 
-      <a class="action-card pink" routerLink="/pricing">
+      <a class="action-card pink" routerLink="/client/pricing">
         <div class="action-icon"><mat-icon>restaurant_menu</mat-icon></div>
         <div class="action-info">
           <h3>Cjenovnik</h3>
@@ -64,12 +64,12 @@
     <div class="section" *ngIf="upcomingEvents.length">
       <div class="section-head">
         <h2>Nadolazeći <span class="grad">događaji</span></h2>
-        <a routerLink="/events" class="see-all">
+        <a routerLink="/client/events" class="see-all">
           Svi <mat-icon>arrow_forward</mat-icon>
         </a>
       </div>
       <div class="events-row">
-        <a class="ev-card" *ngFor="let ev of upcomingEvents" [routerLink]="['/events', ev.id]">
+        <a class="ev-card" *ngFor="let ev of upcomingEvents" [routerLink]="['/client/events', ev.id]">
           <div class="ev-img" [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : 'none'">
             <div class="ev-placeholder" *ngIf="!ev.imageUrl"><mat-icon>nightlife</mat-icon></div>
           </div>

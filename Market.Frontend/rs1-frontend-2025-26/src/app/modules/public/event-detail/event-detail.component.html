@@ -54,153 +54,178 @@
       </div>
     </div>
 
-    <!-- Two-col layout -->
-    <div class="main-grid">
-
-      <!-- LEFT: Table selection -->
-      <div class="col">
-        <div class="section-card">
-          <div class="card-head">
-            <mat-icon>table_restaurant</mat-icon>
-            <span>Odaberite stol</span>
-          </div>
-
-          <p class="tables-hint">Kliknite na stol koji želite rezervisati</p>
-
-          <div class="tables-grid">
-            <div
-              class="table-card"
-              *ngFor="let t of tables"
-              [class.selected]="selectedTable?.id === t.id"
-              [class.vip]="t.isVip"
-              (click)="selectTable(t)"
-            >
-              <div class="table-top">
-                <span class="table-name">{{ t.name }}</span>
-                <span class="vip-badge" *ngIf="t.isVip">VIP</span>
-              </div>
-              <div class="table-section" *ngIf="t.section">{{ t.section }}</div>
-              <div class="table-meta">
-                <span><mat-icon>group</mat-icon> do {{ t.capacity }} osoba</span>
-                <span *ngIf="t.minSpend > 0"><mat-icon>payments</mat-icon> min. {{ formatPrice(t.minSpend) }}</span>
-              </div>
-              <p class="table-desc" *ngIf="t.description">{{ t.description }}</p>
-            </div>
-          </div>
-
-          <div class="no-table-warn" *ngIf="form.touched && !selectedTable">
-            <mat-icon>warning</mat-icon> Molimo odaberite stol
-          </div>
-        </div>
+    <!-- Map — full width -->
+    <div class="section-card map-card" *ngIf="successId === null">
+      <div class="card-head">
+        <mat-icon>table_restaurant</mat-icon>
+        <span>Odaberite stol</span>
+        <p class="tables-hint">Kliknite na stol koji želite rezervisati</p>
       </div>
 
-      <!-- RIGHT: Reservation form OR success -->
-      <div class="col">
+      <div class="floor-map">
 
-        <!-- SUCCESS -->
-        <div class="success-card" *ngIf="successId !== null">
-          <div class="success-icon">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <h2>Rezervacija primljena!</h2>
-          <p>
-            Vaša rezervacija <strong>#{{ successId }}</strong> je uspješno kreirana
-            i čeka potvrdu od strane kluba.
-          </p>
-          <p class="success-note">
-            Primit ćete potvrdu na e-mail adresu koju ste naveli.
-            U slučaju pitanja, kontaktirajte nas direktno.
-          </p>
-          <div class="success-actions">
-            <a routerLink="/events" class="btn-outline">Svi događaji</a>
-            <a routerLink="/" class="btn-primary">Početna</a>
+        <div class="map-zone zone-upper">
+          <span class="zone-label">Upper level</span>
+          <div class="dots-wrap">
+            <div class="map-dot" *ngFor="let t of getSection('Upper level')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="above"
+                 (click)="selectTable(t)"></div>
           </div>
         </div>
 
-        <!-- FORM -->
-        <div class="section-card" *ngIf="successId === null">
-          <div class="card-head">
-            <mat-icon>person_add</mat-icon>
-            <span>Vaši podaci</span>
+        <div class="map-zone zone-terasa">
+          <span class="zone-label">Terasa</span>
+          <div class="dots-wrap">
+            <div class="map-dot" *ngFor="let t of getSection('Terasa')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="above"
+                 (click)="selectTable(t)"></div>
           </div>
-
-          <div class="error-banner" *ngIf="submitError">
-            <mat-icon>error_outline</mat-icon>
-            {{ submitError }}
-          </div>
-
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="half">
-                <mat-label>Ime i prezime</mat-label>
-                <input matInput formControlName="guestName" placeholder="Vaše ime" />
-                <mat-icon matSuffix>person</mat-icon>
-                <mat-error *ngIf="hasError('guestName')">Ime je obavezno</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="half">
-                <mat-label>Broj gostiju</mat-label>
-                <input matInput type="number" formControlName="numberOfGuests" [max]="selectedTable?.capacity ?? 20" min="1" />
-                <mat-icon matSuffix>group</mat-icon>
-                <mat-error *ngIf="hasError('numberOfGuests')">
-                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('min')">Minimum 1 gost</ng-container>
-                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('max')">Maksimum {{ selectedTable?.capacity }} gostiju za ovaj stol</ng-container>
-                  <ng-container *ngIf="form.get('numberOfGuests')?.hasError('required')">Obavezno</ng-container>
-                </mat-error>
-              </mat-form-field>
-            </div>
-
-            <mat-form-field appearance="outline" class="full">
-              <mat-label>Email adresa</mat-label>
-              <input matInput type="email" formControlName="guestEmail" placeholder="vas@email.com" />
-              <mat-icon matSuffix>email</mat-icon>
-              <mat-error *ngIf="hasError('guestEmail')">
-                <ng-container *ngIf="form.get('guestEmail')?.hasError('required')">Email je obavezan</ng-container>
-                <ng-container *ngIf="form.get('guestEmail')?.hasError('email')">Unesite ispravan email</ng-container>
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full">
-              <mat-label>Broj telefona</mat-label>
-              <input matInput formControlName="guestPhone" placeholder="+387 61 123 456" />
-              <mat-icon matSuffix>phone</mat-icon>
-              <mat-error *ngIf="hasError('guestPhone')">Telefon je obavezan</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full">
-              <mat-label>Napomena (opcionalno)</mat-label>
-              <textarea matInput formControlName="note" rows="3" placeholder="Posebni zahtjevi, alergije..."></textarea>
-              <mat-icon matSuffix>notes</mat-icon>
-            </mat-form-field>
-
-            <!-- Selected table summary -->
-            <div class="selected-summary" *ngIf="selectedTable">
-              <mat-icon>table_restaurant</mat-icon>
-              <span>
-                Odabrano: <strong>{{ selectedTable.name }}</strong>
-                <ng-container *ngIf="selectedTable.section"> — {{ selectedTable.section }}</ng-container>
-              </span>
-            </div>
-
-            <div class="form-actions">
-              <button
-                type="submit"
-                class="btn-submit"
-                [class.loading]="isSubmitting"
-                [disabled]="isSubmitting"
-              >
-                <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
-                <mat-icon *ngIf="!isSubmitting">send</mat-icon>
-                {{ isSubmitting ? 'Slanje...' : 'Pošalji rezervaciju' }}
-              </button>
-            </div>
-
-          </form>
         </div>
 
+        <div class="map-zone zone-smoking">
+          <span class="zone-label">Smoking</span>
+          <div class="dots-wrap">
+            <div class="map-dot" *ngFor="let t of getSection('Smoking area')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="above"
+                 (click)="selectTable(t)"></div>
+          </div>
+        </div>
+
+        <div class="map-zone zone-vip">
+          <span class="zone-label vip-label">VIP</span>
+          <div class="dots-wrap">
+            <div class="map-dot dot-vip" *ngFor="let t of getSection('VIP zona')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="right"
+                 (click)="selectTable(t)"></div>
+          </div>
+        </div>
+
+        <div class="map-zone zone-main">
+          <span class="zone-label">Main floor</span>
+          <div class="dots-wrap">
+            <div class="map-dot" *ngFor="let t of getSection('Main floor')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="above"
+                 (click)="selectTable(t)"></div>
+          </div>
+        </div>
+
+        <div class="map-zone zone-lounge">
+          <span class="zone-label">Lounge</span>
+          <div class="dots-wrap">
+            <div class="map-dot dot-lounge" *ngFor="let t of getSection('Lounge')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="left"
+                 (click)="selectTable(t)"></div>
+          </div>
+        </div>
+
+        <div class="map-zone zone-bar">
+          <span class="zone-label">Bar</span>
+          <div class="dots-wrap">
+            <div class="map-dot dot-bar" *ngFor="let t of getSection('Bar area')"
+                 [class.selected]="selectedTable?.id === t.id"
+                 [matTooltip]="dotTooltip(t)"
+                 matTooltipPosition="above"
+                 (click)="selectTable(t)"></div>
+          </div>
+        </div>
+
+        <div class="dj-booth">
+          <mat-icon>graphic_eq</mat-icon>
+          <span>DJ</span>
+        </div>
+
+      </div>
+
+      <div class="map-legend">
+        <span class="legend-item"><span class="legend-dot"></span>Regular</span>
+        <span class="legend-item"><span class="legend-dot dot-vip"></span>VIP</span>
+        <span class="legend-item"><span class="legend-dot selected"></span>Odabrano</span>
       </div>
     </div>
+
+    <!-- SUCCESS -->
+    <div class="success-card" *ngIf="successId !== null">
+      <div class="success-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <h2>Rezervacija primljena!</h2>
+      <p>
+        Vaša rezervacija <strong>#{{ successId }}</strong> je uspješno kreirana
+        i čeka potvrdu od strane kluba.
+      </p>
+      <p class="success-note">
+        Primit ćete potvrdu na e-mail adresu koju ste naveli.
+        U slučaju pitanja, kontaktirajte nas direktno.
+      </p>
+      <div class="success-actions">
+        <a routerLink="/events" class="btn-outline">Svi događaji</a>
+        <a routerLink="/" class="btn-primary">Početna</a>
+      </div>
+    </div>
+
+    <!-- CONFIRM PANEL — below map -->
+    <ng-container *ngIf="successId === null && selectedTable">
+
+      <div class="confirm-bar">
+
+        <div class="error-banner" *ngIf="submitError">
+          <mat-icon>error_outline</mat-icon>
+          {{ submitError }}
+        </div>
+
+        <div class="confirm-inner">
+          <div class="confirm-table">
+            <mat-icon>table_restaurant</mat-icon>
+            <div>
+              <strong>{{ selectedTable.name }}</strong>
+              <span *ngIf="selectedTable.section"> · {{ selectedTable.section }}</span>
+              <span *ngIf="selectedTable.isVip" class="vip-tag">VIP</span>
+              <div class="table-meta">
+                <span>Kapacitet: {{ selectedTable.capacity }} osoba</span>
+                <span *ngIf="selectedTable.minSpend > 0"> · Min. potrošnja: {{ formatPrice(selectedTable.minSpend) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-info-block" *ngIf="profile">
+            <div class="info-row">
+              <mat-icon>person</mat-icon>
+              <span>{{ profile.firstname }} {{ profile.lastname }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>email</mat-icon>
+              <span>{{ profile.email }}</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="btn-submit"
+            [class.loading]="isSubmitting"
+            [disabled]="isSubmitting"
+            (click)="confirmReservation()"
+          >
+            <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+            <mat-icon *ngIf="!isSubmitting">check_circle</mat-icon>
+            {{ isSubmitting ? 'Slanje...' : 'Rezerviši' }}
+          </button>
+        </div>
+
+      </div>
+
+    </ng-container>
   </div>
 
 </div>

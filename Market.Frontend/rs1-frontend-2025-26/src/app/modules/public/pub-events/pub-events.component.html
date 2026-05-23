@@ -54,7 +54,7 @@
 
     <!-- Events grid -->
     <div class="events-grid" *ngIf="!isLoading && filtered.length > 0">
-      <a class="event-card" *ngFor="let ev of filtered" [routerLink]="['/events', ev.id]">
+      <div class="event-card" *ngFor="let ev of filtered" (click)="openEvent(ev.id)">
 
         <div class="card-img" [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : 'none'">
           <div class="card-img-placeholder" *ngIf="!ev.imageUrl">
@@ -90,7 +90,7 @@
           </div>
         </div>
 
-      </a>
+      </div>
     </div>
 
   </div>

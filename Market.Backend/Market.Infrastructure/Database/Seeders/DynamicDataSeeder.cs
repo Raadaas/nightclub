@@ -643,22 +643,95 @@ public static class DynamicDataSeeder
 
     private static async Task SeedClubTablesAsync(DatabaseContext context)
     {
-        if (await context.ClubTables.AnyAsync())
+        if (await context.ClubTables.CountAsync() >= 59)
             return;
 
-        context.ClubTables.AddRange(
-            new ClubTableEntity { Name = "VIP 1", Section = "VIP zona", Capacity = 8, MinSpend = 300m, IsVip = true, Description = "Ugaoni VIP sto uz DJ booth", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "VIP 2", Section = "VIP zona", Capacity = 6, MinSpend = 250m, IsVip = true, Description = "Centralni VIP sto s pogledom na ples", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "VIP 3", Section = "VIP zona", Capacity = 10, MinSpend = 400m, IsVip = true, Description = "Najveći VIP sto, savršen za grupe", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Main A1", Section = "Main floor", Capacity = 4, MinSpend = 80m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Main A2", Section = "Main floor", Capacity = 4, MinSpend = 80m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Main B1", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Main B2", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Bar 1", Section = "Bar area", Capacity = 3, MinSpend = 50m, IsVip = false, Description = "Sto uz bar šank", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
-            new ClubTableEntity { Name = "Bar 2", Section = "Bar area", Capacity = 3, MinSpend = 50m, IsVip = false, Description = "Sto uz bar šank", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow }
-        );
-        await context.SaveChangesAsync();
-        Console.WriteLine("✅ Dynamic seed: club tables added.");
+        var existingList = await context.ClubTables.Select(t => t.Name).ToListAsync();
+        var existing = existingList.ToHashSet();
+
+        var tables = new List<ClubTableEntity>
+        {
+            // ── VIP zona (3) ──────────────────────────────────────────────
+            new() { Name = "VIP 1",  Section = "VIP zona",   Capacity = 8,  MinSpend = 300m, IsVip = true,  Description = "Ugaoni VIP sto uz DJ booth",               IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "VIP 2",  Section = "VIP zona",   Capacity = 6,  MinSpend = 250m, IsVip = true,  Description = "Centralni VIP sto s pogledom na ples",      IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "VIP 3",  Section = "VIP zona",   Capacity = 10, MinSpend = 400m, IsVip = true,  Description = "Najveći VIP sto, savršen za grupe",         IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "VIP 4",  Section = "VIP zona",   Capacity = 8,  MinSpend = 320m, IsVip = true,  Description = "VIP sto uz bočni zid, diskretna lokacija",  IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "VIP 5",  Section = "VIP zona",   Capacity = 6,  MinSpend = 270m, IsVip = true,  Description = "VIP sto s direktnim pogledom na binu",      IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "VIP 6",  Section = "VIP zona",   Capacity = 12, MinSpend = 500m, IsVip = true,  Description = "Privatni VIP prostor za veće grupe",        IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Main floor – Red A (6) ────────────────────────────────────
+            new() { Name = "Main A1", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main A2", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main A3", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main A4", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main A5", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main A6", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Main floor – Red B (6) ────────────────────────────────────
+            new() { Name = "Main B1", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main B2", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main B3", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main B4", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main B5", Section = "Main floor", Capacity = 4, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main B6", Section = "Main floor", Capacity = 6, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Main floor – Red C (6) ────────────────────────────────────
+            new() { Name = "Main C1", Section = "Main floor", Capacity = 4, MinSpend = 75m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main C2", Section = "Main floor", Capacity = 4, MinSpend = 75m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main C3", Section = "Main floor", Capacity = 6, MinSpend = 95m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main C4", Section = "Main floor", Capacity = 6, MinSpend = 95m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main C5", Section = "Main floor", Capacity = 4, MinSpend = 75m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Main C6", Section = "Main floor", Capacity = 4, MinSpend = 75m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Bar area (6) ─────────────────────────────────────────────
+            new() { Name = "Bar 1", Section = "Bar area", Capacity = 3, MinSpend = 50m, IsVip = false, Description = "Sto uz bar šank",            IsEnabled = true,  CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Bar 2", Section = "Bar area", Capacity = 3, MinSpend = 50m, IsVip = false, Description = "Sto uz bar šank",            IsEnabled = true,  CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Bar 3", Section = "Bar area", Capacity = 3, MinSpend = 50m, IsVip = false, Description = "Barski sto s visokim stolicama", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Bar 4", Section = "Bar area", Capacity = 4, MinSpend = 60m, IsVip = false, Description = "Barski sto s visokim stolicama", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Bar 5", Section = "Bar area", Capacity = 4, MinSpend = 60m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Bar 6", Section = "Bar area", Capacity = 2, MinSpend = 40m, IsVip = false, Description = "Intimni sto za dvoje uz šank", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Lounge (8) ───────────────────────────────────────────────
+            new() { Name = "Lounge 1", Section = "Lounge", Capacity = 5, MinSpend = 120m, IsVip = false, Description = "Udobni kauč smještaj, relax zona", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 2", Section = "Lounge", Capacity = 5, MinSpend = 120m, IsVip = false, Description = "Udobni kauč smještaj, relax zona", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 3", Section = "Lounge", Capacity = 6, MinSpend = 140m, IsVip = false, Description = "Ugaoni lounge sa pogledom na main floor", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 4", Section = "Lounge", Capacity = 6, MinSpend = 140m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 5", Section = "Lounge", Capacity = 4, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 6", Section = "Lounge", Capacity = 4, MinSpend = 100m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 7", Section = "Lounge", Capacity = 8, MinSpend = 180m, IsVip = false, Description = "Veliki lounge sto za grupe",        IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Lounge 8", Section = "Lounge", Capacity = 3, MinSpend = 80m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Terasa (8) ───────────────────────────────────────────────
+            new() { Name = "Terasa 1", Section = "Terasa", Capacity = 4, MinSpend = 70m,  IsVip = false, Description = "Vanjski sto s pogledom na ulaz", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 2", Section = "Terasa", Capacity = 4, MinSpend = 70m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 3", Section = "Terasa", Capacity = 6, MinSpend = 90m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 4", Section = "Terasa", Capacity = 6, MinSpend = 90m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 5", Section = "Terasa", Capacity = 4, MinSpend = 70m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 6", Section = "Terasa", Capacity = 4, MinSpend = 70m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 7", Section = "Terasa", Capacity = 8, MinSpend = 110m, IsVip = false, Description = "Grupni sto na terasi",            IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Terasa 8", Section = "Terasa", Capacity = 2, MinSpend = 40m,  IsVip = false, Description = "Romanticni sto za dvoje",         IsEnabled = false, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Upper level (6) ──────────────────────────────────────────
+            new() { Name = "Upper 1", Section = "Upper level", Capacity = 4, MinSpend = 90m,  IsVip = false, Description = "Sto na galeriji s panoramskim pogledom", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Upper 2", Section = "Upper level", Capacity = 4, MinSpend = 90m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Upper 3", Section = "Upper level", Capacity = 6, MinSpend = 110m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Upper 4", Section = "Upper level", Capacity = 6, MinSpend = 110m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Upper 5", Section = "Upper level", Capacity = 8, MinSpend = 140m, IsVip = false, Description = "Grupni sto na galeriji",                IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Upper 6", Section = "Upper level", Capacity = 4, MinSpend = 90m,  IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+
+            // ── Smoking area (3) ─────────────────────────────────────────
+            new() { Name = "Smoking 1", Section = "Smoking area", Capacity = 4, MinSpend = 50m, IsVip = false, Description = "Vanjski sto u smoking zoni", IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Smoking 2", Section = "Smoking area", Capacity = 4, MinSpend = 50m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+            new() { Name = "Smoking 3", Section = "Smoking area", Capacity = 6, MinSpend = 70m, IsVip = false, IsEnabled = true, CreatedAtUtc = DateTime.UtcNow },
+        };
+
+        var toAdd = tables.Where(t => !existing.Contains(t.Name)).ToList();
+        if (toAdd.Count > 0)
+        {
+            context.ClubTables.AddRange(toAdd);
+            await context.SaveChangesAsync();
+            Console.WriteLine($"✅ Dynamic seed: {toAdd.Count} club tables added.");
+        }
     }
 
     private static async Task SeedEventsAsync(DatabaseContext context)

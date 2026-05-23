@@ -1,0 +1,66 @@
+<div class="reservations-page">
+
+  <div class="shader-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <div class="page-content">
+
+    <div class="page-header">
+      <mat-icon>event_seat</mat-icon>
+      <h1>Moje rezervacije</h1>
+    </div>
+
+    <!-- Loading -->
+    <div class="state-wrap" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Učitavanje rezervacija...</p>
+    </div>
+
+    <!-- Error -->
+    <div class="state-wrap error" *ngIf="error && !isLoading">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Empty -->
+    <div class="state-wrap" *ngIf="!isLoading && !error && reservations.length === 0">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <p>Nemate još nijednu rezervaciju.</p>
+      <a routerLink="/client/events" class="btn-primary">Pregledaj događaje</a>
+    </div>
+
+    <!-- List -->
+    <div class="res-list" *ngIf="!isLoading && !error && reservations.length > 0">
+      <div class="res-card" *ngFor="let r of reservations">
+
+        <div class="res-left">
+          <div class="res-status" [ngClass]="statusClass(r.status)">
+            <mat-icon>
+              {{ r.status === ReservationStatus.Confirmed ? 'check_circle' :
+                 r.status === ReservationStatus.Cancelled ? 'cancel' : 'hourglass_top' }}
+            </mat-icon>
+            <span>{{ statusLabel(r.status) }}</span>
+          </div>
+          <div class="res-id">#{{ r.id }}</div>
+        </div>
+
+        <div class="res-body">
+          <div class="res-event">{{ r.eventTitle }}</div>
+          <div class="res-meta">
+            <span><mat-icon>calendar_today</mat-icon>{{ formatDate(r.eventDate) }}</span>
+            <span><mat-icon>table_restaurant</mat-icon>{{ r.clubTableName }}</span>
+          </div>
+        </div>
+
+        <div class="res-right">
+          <div class="res-created">Kreirano: {{ formatCreated(r.createdAtUtc) }}</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

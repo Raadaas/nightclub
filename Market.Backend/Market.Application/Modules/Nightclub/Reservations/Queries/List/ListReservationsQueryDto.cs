@@ -14,4 +14,5 @@ public sealed class ListReservationsQueryDto
     public required ReservationStatus Status { get; init; }
     public required string StatusName { get; init; }
     public required DateTime CreatedAtUtc { get; init; }
+    public required DateTime EventDate { get; init; }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { EventsApiService } from '../../../api-services/events/events-api.service';
 import { ListEventsQueryDto, ListEventsRequest } from '../../../api-services/events/events-api.models';
+import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 
 @Component({
   selector: 'app-pub-events',
@@ -9,7 +11,9 @@ import { ListEventsQueryDto, ListEventsRequest } from '../../../api-services/eve
   styleUrl: './pub-events.component.scss',
 })
 export class PubEventsComponent implements OnInit {
-  private api = inject(EventsApiService);
+  private api         = inject(EventsApiService);
+  private router      = inject(Router);
+  private currentUser = inject(CurrentUserService);
 
   isLoading = true;
   search = '';
@@ -56,6 +60,15 @@ export class PubEventsComponent implements OnInit {
     this.upcoming = src.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     this.past     = src.filter(e => new Date(e.date) <  now).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     this.filtered = this.activeTab === 'upcoming' ? this.upcoming : this.past;
+  }
+
+  openEvent(id: number): void {
+    if (this.currentUser.isAuthenticated()) {
+      const base = this.router.url.startsWith('/client') ? '/client/events' : '/events';
+      this.router.navigate([base, id]);
+    } else {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: `/client/events/${id}` } });
+    }
   }
 
   formatDate(dateStr: string): string {

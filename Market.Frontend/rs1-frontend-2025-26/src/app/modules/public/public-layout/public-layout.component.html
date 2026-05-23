@@ -27,10 +27,30 @@
           <mat-icon>event_seat</mat-icon>
           <span>Rezerviši sada</span>
         </a>
-        <a routerLink="/auth/login" class="login-btn">
-          <mat-icon>login</mat-icon>
-          <span>Prijava</span>
-        </a>
+
+        <!-- Nije prijavljen -->
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/auth/login" class="login-btn">
+            <mat-icon>login</mat-icon>
+            <span>Prijava</span>
+          </a>
+        </ng-container>
+
+        <!-- Prijavljen -->
+        <ng-container *ngIf="isLoggedIn">
+          <div class="user-chip">
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ userEmail }}</span>
+          </div>
+          <a [routerLink]="isAdmin ? '/admin' : '/client'" class="panel-btn">
+            <mat-icon>{{ isAdmin ? 'admin_panel_settings' : 'dashboard' }}</mat-icon>
+            <span>{{ isAdmin ? 'Admin' : 'Moj profil' }}</span>
+          </a>
+          <button class="logout-btn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </ng-container>
+
         <button class="burger" (click)="menuOpen=!menuOpen" aria-label="Menu">
           <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
         </button>

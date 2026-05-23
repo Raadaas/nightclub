@@ -41,6 +41,7 @@ export interface ListReservationsQueryDto {
   status: ReservationStatus;
   statusName: string;
   createdAtUtc: string;
+  eventDate: string;
 }
 
 /**
@@ -55,7 +56,7 @@ export interface CreateReservationCommand {
   clubTableId: number;
   guestName: string;
   guestEmail: string;
-  guestPhone: string;
+  guestPhone?: string | null;
   numberOfGuests: number;
   note?: string | null;
 }

@@ -1,10 +1,13 @@
 namespace Market.Application.Modules.Nightclub.Reservations.Commands.Create;
 
-public class CreateReservationCommandHandler(IAppDbContext ctx)
+public class CreateReservationCommandHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
     : IRequestHandler<CreateReservationCommand, int>
 {
     public async Task<int> Handle(CreateReservationCommand request, CancellationToken ct)
     {
+        var userId = currentUser.UserId
+            ?? throw new MarketConflictException("User not authenticated.");
+
         var eventEntity = await ctx.Events.FirstOrDefaultAsync(x => x.Id == request.EventId, ct);
         if (eventEntity is null)
             throw new MarketNotFoundException($"Event (ID={request.EventId}) not found.");
@@ -18,6 +21,14 @@ public class CreateReservationCommandHandler(IAppDbContext ctx)
 
         if (!table.IsEnabled)
             throw new MarketBusinessRuleException("TBL_001", "This table is not available.");
+
+        bool userAlreadyReserved = await ctx.Reservations
+            .AnyAsync(x => x.EventId == request.EventId
+                        && x.UserId == userId
+                        && x.Status != ReservationStatus.Cancelled, ct);
+
+        if (userAlreadyReserved)
+            throw new MarketConflictException("You already have a reservation for this event.");
 
         bool tableAlreadyReserved = await ctx.Reservations
             .AnyAsync(x => x.EventId == request.EventId
@@ -34,9 +45,10 @@ public class CreateReservationCommandHandler(IAppDbContext ctx)
         {
             EventId = request.EventId,
             ClubTableId = request.ClubTableId,
+            UserId = userId,
             GuestName = request.GuestName.Trim(),
             GuestEmail = request.GuestEmail.Trim(),
-            GuestPhone = request.GuestPhone.Trim(),
+            GuestPhone = request.GuestPhone?.Trim() ?? string.Empty,
             NumberOfGuests = request.NumberOfGuests,
             Note = request.Note?.Trim(),
             Status = ReservationStatus.Pending
